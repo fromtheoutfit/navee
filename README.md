@@ -35,7 +35,7 @@ The depth at which to start your navigation.
 ### startWithAncestorOfActive
 Start your navigation with the root node ancestor of the branch in which the active node exists.
 
-* **Accepts**: Boolean
-* **Default**: false
+> **Type**: Boolean
+> **Default**: false
 
     startWithAncestorOfActive : true
