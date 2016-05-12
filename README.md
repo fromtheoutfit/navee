@@ -21,3 +21,16 @@ The terminology we are using to describe nodes in relation to the active node.
 * **Parent**: The node directly above the active node.
 * **Children**: The nodes directly below the active node.
 
+## Parameters
+### maxDepth (integer)
+The maximum depth of a navigation from the root node.
+
+    maxDepth : 3
+
+### startDepth (integer)
+The depth at which to start your navigation.
+
+    startDepth : 2
+    
+### startWithAncestorOfActive
+
