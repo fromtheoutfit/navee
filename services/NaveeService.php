@@ -419,7 +419,6 @@ class NaveeService extends BaseApplicationComponent {
         // start with the children of the active node
         elseif ($this->config->startWithChildrenOfActive)
         {
-          $test = 'yo';
           if (!$node->ancestorActive)
           {
             if (!$node->descendantActive && !$node->active)
@@ -431,6 +430,7 @@ class NaveeService extends BaseApplicationComponent {
           }
         }
         // start x levels above the active node
+        // todo: This is broken
         elseif ($this->config->startXLevelsAboveActive)
         {
           // if the active node is a descendant, and the node level is less than ancestor level,

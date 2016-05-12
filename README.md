@@ -22,7 +22,13 @@ The terminology we are using to describe nodes in relation to the active node.
 * **Children**: The nodes directly below the active node.
 
 ## Parameters
-### maxDepth : integer
+### activeClass
+The class name you would like to associate with the active node.
+>**Type**: String
+>**Default**: 'active'
+
+
+### maxDepth
 The maximum depth of a navigation from the root node.
 
     maxDepth : 3
@@ -61,6 +67,42 @@ Start your navigation with the root node ancestor of the branch in which the act
 
 ##### Result
 * Item 1
+    * Item 1.1
+        * Item 1.1.1
+        * Item 1.1.2 (**Active Node**)
+            * Item 1.1.2.1
+            * Item 1.1.2.2
+        * Item 1.1.3
+    * Item 1.2
+
+### startXLevelsAboveActive
+Start your navigation x levels above the active node
+
+> **Type**: Integer
+> **Default**: 0
+
+    startXLevelsAboveActive : true
+
+#### Example
+    {% set navConfig = {
+        'startXLevelsAboveActive' : 1,
+    } %}
+    {{ craft.navee.nav('mainNavigation', navConfig) }}
+
+##### Full Navigation
+* Item 1
+    * Item 1.1
+        * Item 1.1.1
+        * Item 1.1.2 (**Active Node**)
+            * Item 1.1.2.1
+            * Item 1.1.2.2
+        * Item 1.1.3
+    * Item 1.2
+* Item 2
+    * Item 2.1
+    * Item 2.2
+
+##### Result
     * Item 1.1
         * Item 1.1.1
         * Item 1.1.2 (**Active Node**)
