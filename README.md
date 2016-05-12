@@ -39,3 +39,33 @@ Start your navigation with the root node ancestor of the branch in which the act
 > **Default**: false
 
     startWithAncestorOfActive : true
+
+#### Example
+    {% set navConfig = {
+        'startWithAncestorOfActive' : true,
+    } %}
+    {{ craft.navee.nav('mainNavigation', navConfig) }}
+
+##### Full Navigation
+* Item 1
+    * Item 1.1
+        * Item 1.1.1
+        * Item 1.1.2 (**Active Node**)
+            * Item 1.1.2.1
+            * Item 1.1.2.2
+        * Item 1.1.3
+    * Item 1.2
+* Item 2
+    * Item 2.1
+    * Item 2.2
+
+##### Result
+* Item 1
+    * Item 1.1
+        * Item 1.1.1
+        * Item 1.1.2 (**Active Node**)
+            * Item 1.1.2.1
+            * Item 1.1.2.2
+        * Item 1.1.3
+    * Item 1.2
+
