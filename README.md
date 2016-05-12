@@ -22,15 +22,20 @@ The terminology we are using to describe nodes in relation to the active node.
 * **Children**: The nodes directly below the active node.
 
 ## Parameters
-### maxDepth (integer)
+### maxDepth : integer
 The maximum depth of a navigation from the root node.
 
     maxDepth : 3
 
-### startDepth (integer)
+### startDepth : integer
 The depth at which to start your navigation.
 
     startDepth : 2
-    
-### startWithAncestorOfActive
 
+### startWithAncestorOfActive
+Start your navigation with the root node ancestor of the branch in which the active node exists.
+
+* **Accepts**: Boolean
+* **Default**: false
+
+    startWithAncestorOfActive : true
