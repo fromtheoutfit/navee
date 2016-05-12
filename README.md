@@ -1,2 +1,2 @@
-# navee-for-craft
+# navee
 Navigation module for Craft CMS
