@@ -1,0 +1,65 @@
+{% extends "_layouts/cp" %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+  <input type="hidden" name="action" value="navee/navigations/saveNavigation">
+  <input type="hidden" name="redirect" value="navee/navigations">
+  {% if navigation.id %}<input type="hidden" name="navigationId" value="{{ navigation.id }}">{% endif %}
+  {% if navigation.structureId %}<input type="hidden" name="structureId" value="{{ navigation.structureId }}">{% endif %}
+  {{ getCsrfInput() }}
+
+  {{ forms.textField({
+  first: true,
+  label: "Name"|t,
+  instructions: "What this navigation will be called in the CP."|t,
+  id: 'name',
+  name: 'name',
+  value: navigation.name,
+  errors: navigation.getErrors('name'),
+  autofocus: true,
+  required: true,
+  translatable: true
+  }) }}
+
+  {{ forms.textField({
+  label: "Handle"|t,
+  instructions: "How you’ll refer to this navigation in the templates."|t,
+  id: 'handle',
+  class: 'code',
+  name: 'handle',
+  value: navigation.handle,
+  errors: navigation.getErrors('handle'),
+  required: true
+  }) }}
+
+  {{ forms.textField({
+  label: "Max Levels"|t,
+  instructions: "The maximum number of levels this navigation can have. Leave blank if you don’t care."|t,
+  id: 'maxLevels',
+  name: 'maxLevels',
+  value: navigation.maxLevels,
+  size: 5,
+  errors: navigation.getErrors('maxLevels')
+  }) }}
+
+  <hr>
+
+  {% include "_includes/fieldlayoutdesigner" with {
+  fieldLayout: navigation.getFieldLayout()
+  } only %}
+
+  <hr>
+
+  <div class="buttons">
+    <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+  </div>
+</form>
+{% endblock %}
+
+
+{% set js %}
+{% if not navigation.handle %}new Craft.HandleGenerator('#name', '#handle');{% endif %}
+{% endset %}
+{% includeJs js %}

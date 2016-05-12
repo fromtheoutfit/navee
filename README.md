@@ -21,4 +21,3 @@ The terminology we are using to describe nodes in relation to the active node.
 * **Parent**: The node directly above the active node.
 * **Children**: The nodes directly below the active node.
 
-### Ancestors

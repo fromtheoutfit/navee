@@ -1,0 +1,31 @@
+{% extends "_layouts/elementindex" %}
+{% set title = "Navigation"|t %}
+{% set elementType = 'Navee_Node' %}
+
+{% set tabs = {
+nodes:    { label: "Trees"|t, url: url('navee/nodes') },
+navigations: { label: "Navigations"|t, url: url('navee/navigations') }
+} %}
+
+{% set selectedTab = 'nodes' %}
+
+{% block sidebar %}
+{% if navigations|length %}
+<div class="buttons">
+  {% if navigations|length > 1 %}
+  <div class="btn submit menubtn add icon">{{ "New Node"|t }}</div>
+  <div class="menu">
+    <ul>
+      {% for navigation in navigations %}
+      <li><a href="{{ url('navee/node/'~navigation.handle~'/new') }}">{{ navigation.name|t }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <a class="btn submit add icon" href="{{ url('navee/node/'~navigations[0].handle~'/new') }}">{{ "New Node"|t }}</a>
+  {% endif %}
+</div>
+{% endif %}
+
+{{ parent() }}
+{% endblock %}

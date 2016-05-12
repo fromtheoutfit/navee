@@ -1,0 +1,50 @@
+{% extends "_layouts/cp" %}
+{% set title = "Navigations"|t %}
+
+{% set tabs = {
+nodes:    { label: "Trees"|t, url: url('navee') },
+navigations: { label: "Navigations"|t, url: url('navee/navigations') }
+} %}
+
+{% set selectedTab = 'navigations' %}
+
+
+{% set content %}
+<div id="nonavigations"{% if navigations %} class="hidden"{% endif %}>
+  <p>{{ "No navigations exist yet."|t }}</p>
+</div>
+
+{% if navigations|length %}
+<table id="navigations" class="data fullwidth collapsible">
+  <thead>
+  <th scope="col">{{ "Name"|t }}</th>
+  <th scope="col">{{ "Handle"|t }}</th>
+  <td class="thin"></td>
+  </thead>
+  <tbody>
+  {% for navigation in navigations %}
+  <tr data-id="{{ navigation.id }}" data-name="{{ navigation.name|t }}">
+    <th scope="row" data-title="{{ 'Name'|t }}"><a href="{{ url('navee/navigations/'~navigation.id) }}">{{ navigation.name|t }}</a></th>
+    <td data-title="{{ 'Handle'|t }}"><code>{{ navigation.handle }}</code></td>
+    <td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}" role="button"></a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+<div id="newnavigationcontainer" class="buttons">
+  <a href="{{ url('navee/navigations/new') }}" class="btn submit add icon">{{ "New navigation"|t }}</a>
+</div>
+{% endset %}
+
+{% set js %}
+var adminTable = new Craft.AdminTable({
+tableSelector: '#navigations',
+noObjectsSelector: '#nonavigations',
+newObjectBtnSelector: '#newnavigationcontainer',
+deleteAction: 'navee/navigations/deleteNavigation',
+confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}” and all its nodes?"|t }}'
+});
+{% endset %}
+{% includeJs js %}

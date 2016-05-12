@@ -1,0 +1,17 @@
+<ul>
+{% nav node in nodes %}
+  <li>
+    <a href="{{ node.link }}">{{ node.title }}</a>
+    <br />{{ node.lft }} / {{ node.rgt }}
+    <br />Descendant Active: {{ node.descendantActive }}
+    <br />Ancestor Active: {{ node.ancestorActive }}
+    <br />Sibling Active: {{ node.siblingActive }}
+    <br />Class: {{ node.class }}
+    {% ifchildren %}
+    <ul>
+      {% children %}
+    </ul>
+    {% endifchildren %}
+  </li>
+{% endnav %}
+</ul>

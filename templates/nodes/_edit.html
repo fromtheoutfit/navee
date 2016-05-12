@@ -1,0 +1,254 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% set navigationHandle = navigation.handle %}
+{% set allGroups = craft.userGroups.getAllGroups() %}
+
+{% includeJsResource "navee/js/navee.js" %}
+{% includeCssResource "navee/css/navee.css" %}
+
+{% block main %}
+<form id="node-form" method="post" accept-charset="UTF-8" data-saveshortcut="1"
+      data-saveshortcut-redirect="{{ continueEditingUrl }}">
+  <input type="hidden" name="action" value="navee/node/saveNode">
+  <input type="hidden" name="redirect" value="navee">
+  <input type="hidden" name="navigationId" value="{{ navigation.id }}">
+  {% if node.id %}<input type="hidden" name="nodeId" value="{{ node.id }}">{% endif %}
+  {% if craft.isLocalized() %}<input type="hidden" name="locale" value="{{ event.locale }}">{% endif %}
+  {{ getCsrfInput() }}
+
+  <div class="grid first" data-max-cols="3">
+    <div class="item" data-position="left" data-colspan="2">
+      <div id="fields" class="pane">
+        {{ forms.textField({
+        label: 'Title'|t,
+        id: 'title',
+        name: 'title',
+        value: node.title,
+        errors: node.getErrors('title'),
+        first: true,
+        autofocus: true,
+        required: true
+        }) }}
+
+        {{ forms.selectField({
+        label: 'Link Type'|t,
+        id: 'linkType',
+        options: linkTypes,
+        name: 'linkType',
+        value: node.linkType,
+        required: true,
+        }) }}
+
+        {{ forms.elementSelectField({
+        label: 'Select Entry'|t,
+        id: 'entryId',
+        name: 'entryId',
+        elementType: entryElementType,
+        addButtonLabel: 'Choose Entry'|t,
+        elements: entryElements,
+        limit: 1
+        }) }}
+
+        {{ forms.textField({
+        label: 'Custom Uri'|t,
+        id: 'customUri',
+        name: 'customUri',
+        value: node.customUri,
+        errors: node.getErrors('customUri'),
+        required: false
+        }) }}
+
+        {% if assetSourcesExist %}
+        {{ forms.elementSelectField({
+        label: 'Select Asset'|t,
+        id: 'assetId',
+        name: 'assetId',
+        criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
+        elementType: assetElementType,
+        addButtonLabel: 'Choose Asset'|t,
+        elements: assetElements,
+        limit: 1,
+        }) }}
+        {% endif %}
+
+        {% if categoriesExist %}
+        {{ forms.elementSelectField({
+        label: 'Select Category'|t,
+        id: 'categoryId',
+        class: 'hidden',
+        name: 'categoryId',
+        elementType: categoryElementType,
+        addButtonLabel: 'Choose Category'|t,
+        elements: categoryElements,
+        limit: 1,
+        }) }}
+        {% endif %}
+
+        <hr/>
+
+        <h2>Attributes</h2>
+
+        {{ forms.textField({
+        label: 'Class'|t,
+        id: 'class',
+        name: 'class',
+        value: node.class,
+        errors: node.getErrors('class'),
+        required: false
+        }) }}
+
+        {{ forms.textField({
+        label: 'Id'|t,
+        id: 'idAttr',
+        name: 'idAttr',
+        value: node.idAttr,
+        errors: node.getErrors('idAttr'),
+        required: false
+        }) }}
+
+        {{ forms.textField({
+        label: 'Rel'|t,
+        id: 'rel',
+        name: 'rel',
+        value: node.rel,
+        errors: node.getErrors('rel'),
+        required: false
+        }) }}
+
+        {{ forms.textField({
+        label: 'Name'|t,
+        id: 'name',
+        name: 'name',
+        value: node.name,
+        errors: node.getErrors('name'),
+        required: false
+        }) }}
+
+        {{ forms.textField({
+        label: 'Title'|t,
+        id: 'titleAttr',
+        name: 'titleAttr',
+        value: node.titleAttr,
+        errors: node.getErrors('titleAttr'),
+        required: false
+        }) }}
+
+        {{ forms.textField({
+        label: 'Access Key'|t,
+        id: 'accessKey',
+        name: 'accessKey',
+        value: node.accessKey,
+        errors: node.getErrors('accessKey'),
+        required: false
+        }) }}
+
+        {{ forms.selectField({
+        label: 'Target'|t,
+        id: 'target',
+        options: {
+        '': 'None'|t,
+        '_blank': '_blank : Open in new window or tab'|t,
+        '_self': '_self : Open in same frame as it was clicked'|t,
+        '_parent': '_parent : Open in parent frame'|t,
+        '_top': '_top : Open in the full body of the window'|t,
+        },
+        name: 'target',
+        value: node.target,
+        required: false
+        }) }}
+
+        <hr/>
+
+        {% if allGroups %}
+        <h2>User Groups</h2>
+        <p>Limit this node to only User Groups selected below.</p>
+        <ul>
+          {% for group in allGroups %}
+          <li>
+            {{ forms.checkbox({
+            label: group.name|t,
+            name: 'userGroups[]',
+            value: group.id,
+            checked: node.userGroupSelected(group.id),
+            }) }}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div>
+          {% for tab in navigation.getFieldLayout().getTabs() %}
+          <div id="tab{{ loop.index }}" {% if not loop.first %} class="hidden" {% endif %}>
+            {% include "_includes/fields" with {
+            fields: tab.getFields(),
+            element: node
+            } only %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="item" data-position="right">
+      <div id="settings" class="pane meta">
+        {% if parentOptionCriteria is defined %}
+        {{ forms.elementSelectField({
+        label: "Parent Node"|t,
+        id: 'parentId',
+        name: 'parentId',
+        elementType: elementType,
+        addButtonLabel: "Choose"|t,
+        sources: ['navigation:'~navigation.id],
+        criteria: parentOptionCriteria,
+        limit: 1,
+        elements: (parent is defined and parent ? [parent])
+        }) }}
+        {% endif %}
+
+        {{ forms.lightswitchField({
+        label: "Include In Navigation"|t,
+        name: 'includeInNavigation',
+        on: node.includeInNavigation,
+        }) }}
+
+        {{ forms.lightswitchField({
+        label: "Passive Node"|t,
+        name: 'passive',
+        on: node.passive,
+        }) }}
+      </div>
+
+      {% if node.id %}
+      <div class="pane lightpane meta">
+        <div class="data">
+          <h5 class="heading">{{ "Date Created"|t }}</h5>
+          <div class="value">{{ node.dateCreated.localeDate() }} {{ node.dateCreated.localeTime() }}</div>
+        </div>
+        <div class="data">
+          <h5 class="heading">{{ "Date Updated"|t }}</h5>
+          <div class="value">{{ node.dateUpdated.localeDate() }} {{ node.dateUpdated.localeTime() }}</div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+
+  <div class="buttons">
+    <div class="btngroup submit first">
+      <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+
+      <div class="btn submit menubtn"></div>
+      <div class="menu">
+        <ul>
+          <li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }}</a>
+          </li>
+          <li><a class="formsubmit" data-redirect="navee/nodes/{{ navigationHandle }}/new">{{ "Save and add another"|t
+            }}</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</form>
+{% endblock %}
