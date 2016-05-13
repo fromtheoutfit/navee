@@ -7,7 +7,7 @@ namespace Craft;
  */
 class NaveeVariable {
 
-  function nav($navigationHandle, $config)
+  function nav($navigationHandle, $config = array())
   {
     craft()->navee->setConfig($config);
     $data = craft()->navee->getNav($navigationHandle);

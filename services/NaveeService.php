@@ -374,11 +374,45 @@ class NaveeService extends BaseApplicationComponent {
     {
       // If there are more than one active nodes, we have to just take the first one
       $activeNodeLevel = $activeNodes[0]['level'];
-      $ancestorLevel = ($activeNodeLevel - $this->config->startDepth >= 1) ? $activeNodeLevel - $this->config->startDepth : 1;
+
+      // Set the top ancestor level
+      $ancestorLevel = (($this->config->startDepth > 1) && ($activeNodeLevel - $this->config->startDepth >= 1)) ? $activeNodeLevel - $this->config->startDepth : 1;
+
+      // Variable overrides for startXLevelsAboveActive
+      if ($this->config->startXLevelsAboveActive)
+      {
+        $xLevelsAboveActive = $activeNodeLevel - $this->config->startXLevelsAboveActive;
+        if ($xLevelsAboveActive > $ancestorLevel)
+        {
+          $ancestorLevel = $xLevelsAboveActive;
+        }
+
+        if ($this->config->maxDepth)
+        {
+          $this->config->maxDepth = ($ancestorLevel + $this->config->maxDepth) - 1;
+        }
+      }
+      
+      // Variable overrides for startWithChildrenOfActive
+      if ($this->config->startWithChildrenOfActive && $this->config->maxDepth)
+      {
+        $this->config->maxDepth = $activeNodeLevel + $this->config->maxDepth;
+      }
+      
+      
+
     }
 
     foreach ($nodes as $k => $node)
     {
+      if (!isset($rootNode))
+      {
+        if ($node->level == 1 && $node->descendantActive)
+        {
+          $rootNode = $node;
+        }
+      }
+
       // Check to see if this node should be removed because it
       // is a descendant of a previously removed node
       if ($this->ancestorRemoved($node, $removedNodes))
@@ -430,18 +464,20 @@ class NaveeService extends BaseApplicationComponent {
           }
         }
         // start x levels above the active node
-        // todo: This is broken
         elseif ($this->config->startXLevelsAboveActive)
         {
           // if the active node is a descendant, and the node level is less than ancestor level,
           // remove but do not put it in the deleted nodes array
-          if ($node->descendantActive && $node->level < $ancestorLevel)
+          if (isset($rootNode) && $this->nodeInBranchOfActiveNode($rootNode, $node))
           {
-            unset($nodes[$k]);
-            continue;
+            if ($node->level < $ancestorLevel)
+            {
+              unset($nodes[$k]);
+              continue;
+            }
           }
           // if the active node is NOT a descendant, remove the node and put it in deleted nodes array
-          elseif (!$node->descendantActive && !$node->ancestorActive && !$node->siblingActive && !$node->active)
+          else
           {
             array_push($removedNodes, $node);
             unset($nodes[$k]);
@@ -453,6 +489,21 @@ class NaveeService extends BaseApplicationComponent {
     }
 
     return $nodes;
+  }
+
+  /**
+   * Determines if a given node is in the branch of an active
+   *
+   * @access private
+   * @param Navee_NodeModel $rootNode
+   * @param Navee_NodeModel $node
+   * @return boolean
+   */
+
+  private function nodeInBranchOfActiveNode(Navee_NodeModel $rootNode, Navee_NodeModel $node)
+  {
+    $data = ($node->lft >= $rootNode->lft && $node->rgt <= $rootNode->rgt) ? true : false;
+    return $data;
   }
 
 }
