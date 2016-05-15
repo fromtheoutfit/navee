@@ -34,6 +34,7 @@ class Navee_ConfigModel extends BaseModel {
       'ignoreIncludeInNavigation' => array(AttributeType::Bool, 'default' => false),
       'maxDepth'                  => array(AttributeType::Number, 'default' => 0),
       'startDepth'                => array(AttributeType::Number, 'default' => 1),
+      'startWithActive'           => array(AttributeType::Bool, 'default' => false),
       'startWithAncestorOfActive' => array(AttributeType::Bool, 'default' => false),
       'startWithChildrenOfActive' => array(AttributeType::Bool, 'default' => false),
       'startWithSiblingsOfActive' => array(AttributeType::Bool, 'default' => false),

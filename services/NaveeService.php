@@ -373,15 +373,16 @@ class NaveeService extends BaseApplicationComponent {
     if (sizeof($activeNodes))
     {
       // If there are more than one active nodes, we have to just take the first one
-      $activeNodeLevel = $activeNodes[0]['level'];
+      $activeNode = $activeNodes[0];
+      
 
       // Set the top ancestor level
-      $ancestorLevel = (($this->config->startDepth > 1) && ($activeNodeLevel - $this->config->startDepth >= 1)) ? $activeNodeLevel - $this->config->startDepth : 1;
+      $ancestorLevel = (($this->config->startDepth > 1) && ($activeNode->level - $this->config->startDepth >= 1)) ? $activeNode->level - $this->config->startDepth : 1;
 
       // Variable overrides for startXLevelsAboveActive
       if ($this->config->startXLevelsAboveActive)
       {
-        $xLevelsAboveActive = $activeNodeLevel - $this->config->startXLevelsAboveActive;
+        $xLevelsAboveActive = $activeNode->level - $this->config->startXLevelsAboveActive;
         if ($xLevelsAboveActive > $ancestorLevel)
         {
           $ancestorLevel = $xLevelsAboveActive;
@@ -396,11 +397,8 @@ class NaveeService extends BaseApplicationComponent {
       // Variable overrides for startWithChildrenOfActive
       if ($this->config->startWithChildrenOfActive && $this->config->maxDepth)
       {
-        $this->config->maxDepth = $activeNodeLevel + $this->config->maxDepth;
+        $this->config->maxDepth = $activeNode->level + $this->config->maxDepth;
       }
-      
-      
-
     }
 
     foreach ($nodes as $k => $node)
@@ -446,6 +444,21 @@ class NaveeService extends BaseApplicationComponent {
           if ($this->config->startDepth == $node->level && !$node->descendantActive && !$node->active)
           {
             array_push($removedNodes, $node);
+            unset($nodes[$k]);
+            continue;
+          }
+        }
+        // start with the active node
+        elseif ($this->config->startWithActive)
+        {
+          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) || $node->level == $activeNode['level'] && !$node->active)
+          {
+            array_push($removedNodes, $node);
+            unset($nodes[$k]);
+            continue;
+          }
+          elseif (!($node->lft >= $activeNode['lft']) && !($node->rgt <= $activeNode['rgt']))
+          {
             unset($nodes[$k]);
             continue;
           }
