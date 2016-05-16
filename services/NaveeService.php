@@ -102,6 +102,7 @@ class NaveeService extends BaseApplicationComponent {
 
     $var = array(
       'nodes' => $nodes,
+      'config' => $this->config,
     );
 
     $oldPath = craft()->templates->getTemplatesPath();

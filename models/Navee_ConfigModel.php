@@ -40,6 +40,7 @@ class Navee_ConfigModel extends BaseModel {
       'startWithSiblingsOfActive' => array(AttributeType::Bool, 'default' => false),
       'startXLevelsAboveActive'   => array(AttributeType::Number, 'default' => 0),
       'userGroups'                => array(AttributeType::Mixed, 'default' => ''),
+      'wrapType'                  => array(AttributeType::String, 'default' => 'ul'),
     ));
   }
 

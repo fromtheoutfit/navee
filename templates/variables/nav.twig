@@ -1,4 +1,4 @@
-<ul>
+<{{ config.wrapType }}>
 {% nav node in nodes %}
   <li>
     <a href="{{ node.link }}">{{ node.title }}</a>
@@ -8,10 +8,10 @@
     <br />Sibling Active: {{ node.siblingActive }}
     <br />Class: {{ node.class }}
     {% ifchildren %}
-    <ul>
+    <{{ config.wrapType }}>
       {% children %}
-    </ul>
+    </{{ config.wrapType }}>
     {% endifchildren %}
   </li>
 {% endnav %}
-</ul>
+</{{ config.wrapType }}>
