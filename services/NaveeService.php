@@ -100,18 +100,7 @@ class NaveeService extends BaseApplicationComponent {
 
     }
 
-    $var = array(
-      'nodes'  => $nodes,
-      'config' => $this->config,
-    );
-
-    $oldPath = craft()->templates->getTemplatesPath();
-    $newPath = craft()->path->getPluginsPath() . 'navee/templates';
-    craft()->templates->setTemplatesPath($newPath);
-    $data = craft()->templates->render('variables/nav', $var);
-    craft()->templates->setTemplatesPath($oldPath);
-
-    return $data;
+    return $nodes;
   }
 
   /**
@@ -410,7 +399,7 @@ class NaveeService extends BaseApplicationComponent {
     {
       if (!isset($rootNode))
       {
-        if ($node->level == 1 && $node->descendantActive)
+        if ($node->level == 1 && ($node->descendantActive || $node->active))
         {
           $rootNode = $node;
         }
@@ -472,13 +461,13 @@ class NaveeService extends BaseApplicationComponent {
         // start with the active node
         elseif ($this->config->startWithActive)
         {
-          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) || $node->level == $activeNode->level && !$node->active)
+          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) || ($node->level == $activeNode->level && !$node->active))
           {
             array_push($removedNodes, $node);
             unset($nodes[$k]);
             continue;
           }
-          elseif (!($node->lft >= $activeNode->lft) && !($node->rgt <= $activeNode->rgt))
+          elseif (($node->lft <= $activeNode->lft || $node->rgt >= $activeNode->rgt) && !$node->active)
           {
             unset($nodes[$k]);
             continue;
