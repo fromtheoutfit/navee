@@ -28,6 +28,7 @@ class Navee_ConfigModel extends BaseModel {
       'activeClass'               => array(AttributeType::String, 'default' => 'active'),
       'activeClassOnAncestors'    => array(AttributeType::Bool, 'default' => 'false'),
       'ancestorActiveClass'       => array(AttributeType::String, 'default' => 'active'),
+      'breadcrumbs'               => array(AttributeType::Bool, 'default' => false),
       'class'                     => array(AttributeType::String, 'default' => ''),
       'disableActiveClass'        => array(AttributeType::Bool, 'default' => false),
       'id'                        => array(AttributeType::String, 'default' => ''),

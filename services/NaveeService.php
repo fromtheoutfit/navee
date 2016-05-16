@@ -101,7 +101,7 @@ class NaveeService extends BaseApplicationComponent {
     }
 
     $var = array(
-      'nodes' => $nodes,
+      'nodes'  => $nodes,
       'config' => $this->config,
     );
 
@@ -365,13 +365,14 @@ class NaveeService extends BaseApplicationComponent {
 
   private function getSubsetOfNodes($nodes, $activeNodes)
   {
-    $removedNodes = array();
+    $removedNodes    = array();
+    $breadcrumbCount = 0;
 
     if (sizeof($activeNodes))
     {
       // If there are more than one active nodes, we have to just take the first one
       $activeNode = $activeNodes[0];
-      
+
 
       // Set the top ancestor level
       $ancestorLevel = (($this->config->startDepth > 1) && ($activeNode->level - $this->config->startDepth >= 1)) ? $activeNode->level - $this->config->startDepth : 1;
@@ -390,7 +391,7 @@ class NaveeService extends BaseApplicationComponent {
           $this->config->maxDepth = ($ancestorLevel + $this->config->maxDepth) - 1;
         }
       }
-      
+
       // Variable overrides for startWithChildrenOfActive
       if ($this->config->startWithChildrenOfActive && $this->config->maxDepth)
       {
@@ -437,13 +438,29 @@ class NaveeService extends BaseApplicationComponent {
         unset($nodes[$k]);
         continue;
       }
-      
+
       // the rest of these parameters rely on there actually being an active node
       if (sizeof($activeNodes))
       {
-        
+        // breadcrumbs
+        if ($this->config->breadcrumbs)
+        {
+          if (!$node->active && !$node->descendantActive)
+          {
+            array_push($removedNodes, $node);
+            unset($nodes[$k]);
+            continue;
+          }
+          else
+          {
+            $node->lft       = $breadcrumbCount + 2;
+            $node->rgt       = $breadcrumbCount + 3;
+            $node->level     = 1;
+            $breadcrumbCount = $breadcrumbCount + 2;
+          }
+        }
         // start with the ancestor of the active node
-        if ($this->config->startWithAncestorOfActive)
+        elseif ($this->config->startWithAncestorOfActive)
         {
           if ($this->config->startDepth == $node->level && !$node->descendantActive && !$node->active)
           {
@@ -535,6 +552,7 @@ class NaveeService extends BaseApplicationComponent {
   private function nodeInBranchOfActiveNode(Navee_NodeModel $rootNode, Navee_NodeModel $node)
   {
     $data = ($node->lft >= $rootNode->lft && $node->rgt <= $rootNode->rgt) ? true : false;
+
     return $data;
   }
 
