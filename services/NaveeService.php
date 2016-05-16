@@ -397,8 +397,8 @@ class NaveeService extends BaseApplicationComponent {
         $this->config->maxDepth = $activeNode->level + $this->config->maxDepth;
       }
 
-      // Variable overrides for startWithActive
-      if ($this->config->startWithActive && $this->config->maxDepth)
+      // Variable overrides for startWithActive / startWithSiblingsOfActive
+      if (($this->config->startWithActive || $this->config->startWithSiblingsOfActive) && $this->config->maxDepth)
       {
         $this->config->maxDepth = $activeNode->level + $this->config->maxDepth - 1;
       }
@@ -456,6 +456,21 @@ class NaveeService extends BaseApplicationComponent {
         elseif ($this->config->startWithActive)
         {
           if (!$this->nodeInBranchOfActiveNode($rootNode, $node) || $node->level == $activeNode->level && !$node->active)
+          {
+            array_push($removedNodes, $node);
+            unset($nodes[$k]);
+            continue;
+          }
+          elseif (!($node->lft >= $activeNode->lft) && !($node->rgt <= $activeNode->rgt))
+          {
+            unset($nodes[$k]);
+            continue;
+          }
+        }
+        // start with the active node
+        elseif ($this->config->startWithSiblingsOfActive)
+        {
+          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) && !$node->active)
           {
             array_push($removedNodes, $node);
             unset($nodes[$k]);
