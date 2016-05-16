@@ -74,11 +74,7 @@ class NaveeService extends BaseApplicationComponent {
           // check to see if the node is active
           if ($this->nodeActive($node))
           {
-            $activeNodes[] = array(
-              'lft'   => $node->lft,
-              'rgt'   => $node->rgt,
-              'level' => $node->level,
-            );
+            $activeNodes[] = $node;
           }
         }
         else
@@ -275,7 +271,7 @@ class NaveeService extends BaseApplicationComponent {
 
   private function setAncestorActive(Navee_NodeModel $node, $activeNode)
   {
-    return (($node->lft > $activeNode['lft']) && ($node->rgt < $activeNode['rgt']));
+    return (($node->lft > $activeNode->lft) && ($node->rgt < $activeNode->rgt));
   }
 
   /**
@@ -289,7 +285,7 @@ class NaveeService extends BaseApplicationComponent {
 
   private function setDescendantActive(Navee_NodeModel $node, $activeNode)
   {
-    return (($node->lft < $activeNode['lft']) && ($node->rgt > $activeNode['rgt']));
+    return (($node->lft < $activeNode->lft) && ($node->rgt > $activeNode->rgt));
   }
 
   /**
@@ -303,7 +299,7 @@ class NaveeService extends BaseApplicationComponent {
 
   private function setSiblingActive(Navee_NodeModel $node, $activeNode)
   {
-    return (!$node->active && ($node->level == $activeNode['level']));
+    return (!$node->active && ($node->level == $activeNode->level));
   }
 
   /**
@@ -399,6 +395,13 @@ class NaveeService extends BaseApplicationComponent {
       {
         $this->config->maxDepth = $activeNode->level + $this->config->maxDepth;
       }
+
+      // Variable overrides for startWithActive
+      if ($this->config->startWithActive && $this->config->maxDepth)
+      {
+        $this->config->maxDepth = $activeNode->level + $this->config->maxDepth - 1;
+      }
+
     }
 
     foreach ($nodes as $k => $node)
@@ -451,13 +454,13 @@ class NaveeService extends BaseApplicationComponent {
         // start with the active node
         elseif ($this->config->startWithActive)
         {
-          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) || $node->level == $activeNode['level'] && !$node->active)
+          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) || $node->level == $activeNode->level && !$node->active)
           {
             array_push($removedNodes, $node);
             unset($nodes[$k]);
             continue;
           }
-          elseif (!($node->lft >= $activeNode['lft']) && !($node->rgt <= $activeNode['rgt']))
+          elseif (!($node->lft >= $activeNode->lft) && !($node->rgt <= $activeNode->rgt))
           {
             unset($nodes[$k]);
             continue;
