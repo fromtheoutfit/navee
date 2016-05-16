@@ -14,7 +14,7 @@ class NaveeVariable {
     return TemplateHelper::getRaw(rtrim($data));
   }
 
-  function getCustomNav($navigationHandle, $config)
+  function getNav($navigationHandle, $config)
   {
 
   }
