@@ -23,6 +23,7 @@ class Navee_ConfigModel extends BaseModel {
   {
     // todo
     // skipClosedEntries
+    // levelCount
 
     return array_merge(parent::defineAttributes(), array(
       'activeClass'               => array(AttributeType::String, 'default' => 'active'),

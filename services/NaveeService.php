@@ -59,6 +59,7 @@ class NaveeService extends BaseApplicationComponent {
       {
         // Set the link for this node based on the type
         $node = $this->setLink($node);
+        $node->text = $node->title;
 
         // Check to see if this node should be removed because it
         // is a descendant of a previously removed node
