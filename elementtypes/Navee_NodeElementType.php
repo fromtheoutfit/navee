@@ -149,9 +149,10 @@ class Navee_NodeElementType extends BaseElementType {
   public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
   {
     $query
-      ->addSelect('nodes.*, i18nEntry.uri as entryLink, i18nCategory.uri as categoryLink')
+      ->addSelect('nodes.*, i18nEntry.uri as entryLink, i18nCategory.uri as categoryLink, elementEntry.enabled as entryEnabled')
       ->join('navee_nodes nodes', 'nodes.id = elements.id')
       ->join('navee_navigations navigations', 'navigations.id = nodes.navigationId')
+      ->leftJoin('elements elementEntry', 'elementEntry.id = nodes.entryId')
       ->leftJoin('elements_i18n i18nEntry', 'i18nEntry.elementId = nodes.entryId')
       ->leftJoin('elements_i18n i18nCategory', 'i18nCategory.elementId = nodes.categoryId')
       ->leftJoin('structures structures', 'structures.id = navigations.structureId')

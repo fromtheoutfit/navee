@@ -199,6 +199,13 @@ class NaveeService extends BaseApplicationComponent {
       $included = $node->includeInNavigation;
     }
 
+    // checks to see if disabled entries should be skipped
+    if ($this->config->skipDisabledEntries && !is_null($node->entryEnabled))
+    {
+      $included = $node->entryEnabled;
+    }
+
+
     // and return what we've got at the end of that confusing mess
     return $included;
   }

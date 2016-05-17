@@ -33,6 +33,7 @@ class Navee_NodeModel extends BaseElementModel {
       'active'              => array(AttributeType::Bool, 'default' => false),
       'ancestorActive'      => array(AttributeType::Bool, 'default' => false),
       'descendantActive'    => array(AttributeType::Bool, 'default' => false),
+      'entryEnabled'      => array(AttributeType::Bool, 'default' => false),
       'link'                => array(AttributeType::String, 'default' => ''),
       'text'                => array(AttributeType::String, 'default' => ''),
       'entryLink'           => array(AttributeType::String, 'default' => ''),
