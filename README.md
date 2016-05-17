@@ -13,5 +13,38 @@ Navigation module for Craft CMS
 ## Documentation
 Full documentation can be found [in the wiki](https://github.com/fromtheoutfit/navee/wiki).
 
+## Tags
+Outputting simple nested unordered lists can be as simple as:
+
+    {{ craft.navee.nav('mainNavigation') }}
+
+Or you can roll your own HTML:
+
+    {% set navConfig = {
+            'startwithActive' : true,
+            'maxDepth' : 2,
+            'activeClassOnAncestors' : true,
+            'ancestorActiveClass' : 'activeAncestor',
+        } %}
+
+    {% set navigation = craft.navee.getNav('mainNavigation', navConfig) %}
+
+    <ul>
+        {% nav node in navigation %}
+            <li{% if node.class %} class="{{ node.class }}"{% endif %}>
+                <a href="{{ node.link }}">{{ node.title }}</a>
+                {% ifchildren %}
+                    <ul>{% children %}</ul>
+                {% endifchildren %}
+            </li>
+        {% endnav %}
+    </ul>
+
+Read more about your [tag options in the wiki](https://github.com/fromtheoutfit/navee/wiki/Tags).
+
+## Configuring Your Navigation
+Navee comes with lots of great options for configuring your navigation. Read about all [available parameters in the wiki](https://github.com/fromtheoutfit/navee/wiki/Parameters).
+
+
 
 
