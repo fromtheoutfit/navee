@@ -13,6 +13,11 @@ class Navee_NodeController extends BaseController {
   {
     $variables['navigations'] = craft()->navee_navigation->getAllNavigations();
 
+    if (!sizeof($variables['navigations']))
+    {
+      craft()->request->redirect(UrlHelper::getCpUrl('navee/navigations/new'));
+    }
+
     $this->renderTemplate('navee/index', $variables);
   }
 
