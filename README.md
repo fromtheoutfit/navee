@@ -9,7 +9,7 @@ Navigation module for Craft CMS
 * Custom field groups per navigation.
 * Limit node visibility to specific User Groups.
 * Dynamic navigation based on current active node.
-* Easily create [breadcrumbs](https://github.com/fromtheoutfit/navee/wiki/breadcrumbs).
+* Easily create [breadcrumbs](https://github.com/fromtheoutfit/navee/wiki/Parameters#breadcrumbs).
 
 ## Documentation
 Full documentation can be found [in the wiki](https://github.com/fromtheoutfit/navee/wiki).
