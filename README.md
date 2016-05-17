@@ -10,5 +10,8 @@ Navigation module for Craft CMS
 * Dynamic navigation based on current active node.
 * Easily create breadcrumbs.
 
+## Documentation
+Full documentation can be found [in the wiki](wiki).
+
 
 
