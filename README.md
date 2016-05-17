@@ -1,5 +1,5 @@
 # Navee for Craft CMS
-Navigation module for Craft CMS
+Simple Navigation, Made Simple. Build any kind of navigation you like, without limitation. Rewritten from the ground up for Craft CMS.
 
 ![Navee for craft control panel](https://fromtheoutfit.com/lib/media/add-ons/navee/navee-for-craft-cp.gif)
 
