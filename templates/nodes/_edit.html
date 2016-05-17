@@ -2,6 +2,7 @@
 {% import "_includes/forms" as forms %}
 {% set navigationHandle = navigation.handle %}
 {% set allGroups = craft.userGroups.getAllGroups() %}
+{% set fieldLayouts = navigation.getFieldLayout().getTabs() %}
 
 {% includeJsResource "navee/js/navee.js" %}
 {% includeCssResource "navee/css/navee.css" %}
@@ -159,6 +160,20 @@
 
         <hr/>
 
+        {% if fieldLayouts %}
+          <div>
+            {% for tab in fieldLayouts %}
+            <div id="tab{{ loop.index }}" {% if not loop.first %} class="hidden" {% endif %}>
+              {% include "_includes/fields" with {
+              fields: tab.getFields(),
+              element: node
+              } only %}
+            </div>
+            {% endfor %}
+          </div>
+          <hr />
+        {% endif %}
+
         {% if allGroups %}
         <h2>User Groups</h2>
         <p>Limit this node to only User Groups selected below.</p>
@@ -175,17 +190,6 @@
           {% endfor %}
         </ul>
         {% endif %}
-
-        <div>
-          {% for tab in navigation.getFieldLayout().getTabs() %}
-          <div id="tab{{ loop.index }}" {% if not loop.first %} class="hidden" {% endif %}>
-            {% include "_includes/fields" with {
-            fields: tab.getFields(),
-            element: node
-            } only %}
-          </div>
-          {% endfor %}
-        </div>
       </div>
     </div>
     <div class="item" data-position="right">
@@ -243,7 +247,7 @@
         <ul>
           <li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }}</a>
           </li>
-          <li><a class="formsubmit" data-redirect="navee/nodes/{{ navigationHandle }}/new">{{ "Save and add another"|t
+          <li><a class="formsubmit" data-redirect="navee/node/{{ navigationHandle }}/new">{{ "Save and add another"|t
             }}</a></li>
         </ul>
       </div>

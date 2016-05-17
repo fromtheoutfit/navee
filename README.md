@@ -1,6 +1,7 @@
 # Navee for CraftCMS
 Navigation module for Craft CMS
 
+![Navee for craft control panel](https://fromtheoutfit.com/lib/media/add-ons/navee/navee-for-craft-cp.gif)
 
 ## Features
 * Flexible navigations made up of assets, categories, custom urls and entries (singles, channels and structures).
