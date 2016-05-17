@@ -14,7 +14,7 @@
   <input type="hidden" name="redirect" value="navee">
   <input type="hidden" name="navigationId" value="{{ navigation.id }}">
   {% if node.id %}<input type="hidden" name="nodeId" value="{{ node.id }}">{% endif %}
-  {% if craft.isLocalized() %}<input type="hidden" name="locale" value="{{ event.locale }}">{% endif %}
+  {% if craft.isLocalized() %}<input type="hidden" name="locale" value="{{ node.locale }}">{% endif %}
   {{ getCsrfInput() }}
 
   <div class="grid first" data-max-cols="3">
