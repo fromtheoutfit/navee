@@ -1,4 +1,4 @@
-# Navee for CraftCMS
+# Navee for Craft CMS
 Navigation module for Craft CMS
 
 ![Navee for craft control panel](https://fromtheoutfit.com/lib/media/add-ons/navee/navee-for-craft-cp.gif)
