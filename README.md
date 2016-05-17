@@ -11,7 +11,7 @@ Navigation module for Craft CMS
 * Easily create breadcrumbs.
 
 ## Documentation
-Full documentation can be found [in the wiki](/fromtheoutfit/navee/wiki).
+Full documentation can be found [in the wiki](fromtheoutfit/navee/wiki).
 
 
 
