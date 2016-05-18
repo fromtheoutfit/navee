@@ -10,7 +10,7 @@ class NaveePlugin extends BasePlugin {
 
   public function getVersion()
   {
-    return '1.0.1';
+    return '1.0.2';
   }
 
   public function getDeveloper()
@@ -26,6 +26,11 @@ class NaveePlugin extends BasePlugin {
   public function hasCpSection()
   {
     return true;
+  }
+
+  public function getDocumentationUrl()
+  {
+    return 'https://github.com/fromtheoutfit/navee/wiki';
   }
 
   public function getReleaseFeedUrl()
