@@ -28,6 +28,11 @@ class NaveePlugin extends BasePlugin {
     return true;
   }
 
+  public function getReleaseFeedUrl()
+  {
+    return 'https://raw.githubusercontent.com/fromtheoutfit/navee/master/releases.json';
+  }
+
   /**
    * Register control panel routes
    */
