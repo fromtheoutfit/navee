@@ -1,7 +1,9 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 {% set navigationHandle = navigation.handle %}
-{% set allGroups = craft.userGroups.getAllGroups() %}
+{% if craft.app.getEditionName() == 'Pro' %}
+  {% set allGroups = craft.userGroups.getAllGroups() %}
+{% endif %}
 {% set fieldLayouts = navigation.getFieldLayout().getTabs() %}
 
 {% includeJsResource "navee/js/navee.js" %}
@@ -158,9 +160,9 @@
         required: false
         }) }}
 
-        <hr/>
 
         {% if fieldLayouts %}
+          <hr/>
           <div>
             {% for tab in fieldLayouts %}
             <div id="tab{{ loop.index }}" {% if not loop.first %} class="hidden" {% endif %}>
@@ -171,10 +173,10 @@
             </div>
             {% endfor %}
           </div>
-          <hr />
         {% endif %}
 
-        {% if allGroups %}
+        {% if craft.app.getEditionName() == 'Pro' and allGroups %}
+        <hr />
         <h2>User Groups</h2>
         <p>Limit this node to only User Groups selected below.</p>
         <ul>
