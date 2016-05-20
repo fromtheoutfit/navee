@@ -103,6 +103,7 @@ class Navee_NodeElementType extends BaseElementType {
   {
     return array(
       'title' => Craft::t('Title'),
+      'link'  => Craft::t('Link'),
     );
   }
 
@@ -209,19 +210,92 @@ class Navee_NodeElementType extends BaseElementType {
    */
   public function getEditorHtml(BaseElementModel $element)
   {
-    $html = craft()->templates->render('node/_edit', array(
-      'element'             => $element,
-      'entryElements'       => craft()->entries->getEntryById($element->entryId),
+    /*
+     * 'entryElements'       => craft()->entries->getEntryById($element->entryId),
       'entryElementType'    => craft()->elements->getElementType('Entry'),
       'assetElements'       => craft()->assets->getFileById($element->assetId),
       'assetElementType'    => craft()->elements->getElementType('Asset'),
       'categoryElements'    => craft()->categories->getCategoryById($element->categoryId),
       'categoryElementType' => craft()->elements->getElementType('Category'),
-    ));
+     */
+    
+    $variables = array(
+      'node'             => $element,
+    );
+
+    // get potential elements
+    $variables['entryElements'][]    = craft()->entries->getEntryById($element->entryId);
+    $variables['assetElements'][]    = craft()->assets->getFileById($element->assetId);
+    $variables['categoryElements'][] = craft()->categories->getCategoryById($element->categoryId);
+
+    // get different link element types
+    $variables['entryElementType']    = craft()->elements->getElementType('Entry');
+    $variables['assetElementType']    = craft()->elements->getElementType('Asset');
+    $variables['categoryElementType'] = craft()->elements->getElementType('Category');
+
+    // check to make sure assets and categories exist
+    $variables['assetSourcesExist'] = sizeof(craft()->assetSources->getAllSources()) ? true : false;
+    $variables['categoriesExist']   = sizeof(craft()->categories->getAllGroups()) ? true : false;
+
+    // set up the different link Types
+    $variables['linkTypes'] = array(
+      'entryId'   => 'Entry',
+      'customUri' => 'Custom',
+    );
+
+    // if asset sources exist, add Asset as a link type option
+    if ($variables['assetSourcesExist'])
+    {
+      $variables['linkTypes']['assetId'] = 'Asset';
+    }
+
+    // if asset sources exist, add Asset as a link type option
+    if ($variables['categoriesExist'])
+    {
+      $variables['linkTypes']['categoryId'] = 'Category';
+    }
+
+    $html = craft()->templates->render('navee/nodes/_hud', $variables);
 
     $html .= parent::getEditorHtml($element);
 
     return $html;
+  }
+
+  public function saveElement(BaseElementModel $element, $vars)
+  {
+    //var_dump($element);
+    //exit;
+
+//    if (isset($params['customUrl']))
+//    {
+//      $element->customUrl = $params['customUrl'];
+//    }
+//
+//    $linkedEntry  = $params['linkedEntryId'];
+//
+//    if (count($linkedEntry) > 0 ) {
+//      $element->linkedEntryId = $linkedEntry[0];
+//    }
+    $element->linkType = $vars['linkType'];
+
+    if (sizeof($vars['assetId']))
+    {
+      $element->assetId = $vars['assetId'][0];
+    }
+
+    if (sizeof($vars['entryId']))
+    {
+      $element->entryId = $vars['entryId'][0];
+    }
+
+    if (sizeof($vars['categoryId']))
+    {
+      $element->categoryId = $vars['categoryId'][0];
+    }
+
+
+    return craft()->navee_node->saveNode($element);
   }
 
   /**

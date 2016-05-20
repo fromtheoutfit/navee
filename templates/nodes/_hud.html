@@ -1,0 +1,93 @@
+{% import "_includes/forms" as forms %}
+
+<script type="application/javascript">
+  $(function () {
+
+    var linkType = $('select[id*="-linkType"]');
+
+    if (linkType.val().length){
+      setLinkType(linkType.val());
+    }
+
+    linkType.change(function()
+    {
+      setLinkType(linkType.val());
+    });
+
+    function setLinkType(linkType)
+    {
+      $('div[id*="entryId-field"], div[id*="assetId-field"], div[id*="categoryId-field"], div[id*="customUri-field"]').hide();
+      $('div[id*="' + linkType + '-field"]').show();
+    }
+
+
+  });
+
+
+</script>
+
+{{ forms.textField({
+label: 'Title'|t,
+id: 'title',
+name: 'title',
+value: node.title,
+errors: node.getErrors('title'),
+first: true,
+autofocus: true,
+required: true
+}) }}
+
+{{ forms.selectField({
+label: 'Link Type'|t,
+id: 'linkType',
+options: linkTypes,
+name: 'linkType',
+value: node.linkType,
+required: true,
+}) }}
+
+
+{{ forms.elementSelectField({
+label: 'Select Entry'|t,
+id: 'entryId',
+name: 'entryId',
+elementType: entryElementType,
+addButtonLabel: 'Choose Entry'|t,
+elements: entryElements,
+limit: 1
+}) }}
+
+{{ forms.textField({
+label: 'Custom Uri'|t,
+id: 'customUri',
+name: 'customUri',
+value: node.customUri,
+errors: node.getErrors('customUri'),
+required: false
+}) }}
+
+{% if assetSourcesExist %}
+{{ forms.elementSelectField({
+label: 'Select Asset'|t,
+id: 'assetId',
+name: 'assetId',
+criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
+elementType: assetElementType,
+addButtonLabel: 'Choose Asset'|t,
+elements: assetElements,
+limit: 1,
+}) }}
+{% endif %}
+
+{% if categoriesExist %}
+{{ forms.elementSelectField({
+label: 'Select Category'|t,
+id: 'categoryId',
+class: 'hidden',
+name: 'categoryId',
+elementType: categoryElementType,
+addButtonLabel: 'Choose Category'|t,
+elements: categoryElements,
+limit: 1,
+}) }}
+{% endif %}
