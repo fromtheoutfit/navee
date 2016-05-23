@@ -1,30 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-<script type="application/javascript">
-  $(function () {
 
-    var linkType = $('select[id*="-linkType"]');
-
-    if (linkType.val().length){
-      setLinkType(linkType.val());
-    }
-
-    linkType.change(function()
-    {
-      setLinkType(linkType.val());
-    });
-
-    function setLinkType(linkType)
-    {
-      $('div[id*="entryId-field"], div[id*="assetId-field"], div[id*="categoryId-field"], div[id*="customUri-field"]').hide();
-      $('div[id*="' + linkType + '-field"]').show();
-    }
-
-
-  });
-
-
-</script>
 
 {{ forms.textField({
 label: 'Title'|t,
@@ -91,3 +67,29 @@ elements: categoryElements,
 limit: 1,
 }) }}
 {% endif %}
+
+<script type="application/javascript">
+  $(function () {
+
+    var linkType = $('select[id*="-linkType"]:last');
+
+    if (linkType.val().length){
+      setLinkType(linkType.val());
+    }
+
+    linkType.change(function()
+    {
+      setLinkType(linkType.val());
+    });
+
+    function setLinkType(type)
+    {
+      $('div[id*="entryId-field"], div[id*="assetId-field"], div[id*="categoryId-field"], div[id*="customUri-field"]').hide();
+      $('div[id*="' + type + '-field"]').show();
+    }
+
+
+  });
+
+
+</script>

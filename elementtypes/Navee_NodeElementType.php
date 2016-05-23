@@ -210,15 +210,6 @@ class Navee_NodeElementType extends BaseElementType {
    */
   public function getEditorHtml(BaseElementModel $element)
   {
-    /*
-     * 'entryElements'       => craft()->entries->getEntryById($element->entryId),
-      'entryElementType'    => craft()->elements->getElementType('Entry'),
-      'assetElements'       => craft()->assets->getFileById($element->assetId),
-      'assetElementType'    => craft()->elements->getElementType('Asset'),
-      'categoryElements'    => craft()->categories->getCategoryById($element->categoryId),
-      'categoryElementType' => craft()->elements->getElementType('Category'),
-     */
-    
     $variables = array(
       'node'             => $element,
     );
@@ -264,32 +255,19 @@ class Navee_NodeElementType extends BaseElementType {
 
   public function saveElement(BaseElementModel $element, $vars)
   {
-    //var_dump($element);
-    //exit;
-
-//    if (isset($params['customUrl']))
-//    {
-//      $element->customUrl = $params['customUrl'];
-//    }
-//
-//    $linkedEntry  = $params['linkedEntryId'];
-//
-//    if (count($linkedEntry) > 0 ) {
-//      $element->linkedEntryId = $linkedEntry[0];
-//    }
     $element->linkType = $vars['linkType'];
 
-    if (sizeof($vars['assetId']))
+    if (is_array($vars['assetId']) && sizeof($vars['assetId']))
     {
       $element->assetId = $vars['assetId'][0];
     }
 
-    if (sizeof($vars['entryId']))
+    if (is_array($vars['entryId']) && sizeof($vars['entryId']))
     {
       $element->entryId = $vars['entryId'][0];
     }
 
-    if (sizeof($vars['categoryId']))
+    if (is_array($vars['categoryId']) && sizeof($vars['categoryId']))
     {
       $element->categoryId = $vars['categoryId'][0];
     }
