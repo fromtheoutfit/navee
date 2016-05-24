@@ -28,12 +28,20 @@ class Navee_NavigationModel extends BaseModel {
   public function defineAttributes()
   {
     return array(
-      'id'            => AttributeType::Number,
-      'name'          => AttributeType::String,
-      'handle'          => AttributeType::Handle,
-      'fieldLayoutId' => AttributeType::Number,
-      'maxLevels'     => AttributeType::Number,
-      'structureId'   => AttributeType::Number,
+      'id'             => AttributeType::Number,
+      'name'           => AttributeType::String,
+      'handle'         => AttributeType::Handle,
+      'fieldLayoutId'  => AttributeType::Number,
+      'maxLevels'      => AttributeType::Number,
+      'structureId'    => AttributeType::Number,
+      'showClass'      => array(AttributeType::Bool, 'default' => false),
+      'showId'         => array(AttributeType::Bool, 'default' => false),
+      'showRel'        => array(AttributeType::Bool, 'default' => false),
+      'showName'       => array(AttributeType::Bool, 'default' => false),
+      'showTitle'      => array(AttributeType::Bool, 'default' => false),
+      'showAccessKey'  => array(AttributeType::Bool, 'default' => false),
+      'showTarget'     => array(AttributeType::Bool, 'default' => false),
+      'showUserGroups' => array(AttributeType::Bool, 'default' => false),
     );
   }
 

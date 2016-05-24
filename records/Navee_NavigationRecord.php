@@ -11,11 +11,19 @@ class Navee_NavigationRecord extends BaseRecord {
   protected function defineAttributes()
   {
     return array(
-      'name'          => array(AttributeType::String, 'required' => true, 'unique' => true),
-      'handle'          => array(AttributeType::Handle, 'required' => true, 'unique' => true),
+      'name'           => array(AttributeType::String, 'required' => true, 'unique' => true),
+      'handle'         => array(AttributeType::Handle, 'required' => true, 'unique' => true),
       'maxLevels'      => AttributeType::Number,
-      'fieldLayoutId' => AttributeType::Number,
-      'structureId'   => AttributeType::Number,
+      'fieldLayoutId'  => AttributeType::Number,
+      'structureId'    => AttributeType::Number,
+      'showClass'      => array(AttributeType::Bool, 'default' => false),
+      'showId'         => array(AttributeType::Bool, 'default' => false),
+      'showRel'        => array(AttributeType::Bool, 'default' => false),
+      'showName'       => array(AttributeType::Bool, 'default' => false),
+      'showTitle'      => array(AttributeType::Bool, 'default' => false),
+      'showAccessKey'  => array(AttributeType::Bool, 'default' => false),
+      'showTarget'     => array(AttributeType::Bool, 'default' => false),
+      'showUserGroups' => array(AttributeType::Bool, 'default' => false),
     );
   }
 
@@ -26,17 +34,6 @@ class Navee_NavigationRecord extends BaseRecord {
       'creator'     => array(static::BELONGS_TO, 'UserRecord', 'required' => false, 'onDelete' => static::SET_NULL),
     );
   }
-
-//  /**
-//   * @return array
-//   */
-//  public function defineIndexes()
-//  {
-//    return array(
-//      array('columns' => array('name'), 'unique' => true),
-//      array('columns' => array('handle'), 'unique' => true),
-//    );
-//  }
 
   public function create()
   {
