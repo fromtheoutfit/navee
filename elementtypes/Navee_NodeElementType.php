@@ -101,9 +101,10 @@ class Navee_NodeElementType extends BaseElementType {
    */
   public function defineTableAttributes($source = null)
   {
+
     return array(
       'title' => Craft::t('Title'),
-      'link'  => Craft::t('Link'),
+      'linkedElementCpEditUrl'  => Craft::t('Type'),
     );
   }
 
@@ -118,6 +119,33 @@ class Navee_NodeElementType extends BaseElementType {
   {
     switch ($attribute)
     {
+      case 'linkedElementCpEditUrl':
+        switch ($element->linkType)
+        {
+          case 'entryId':
+            $criteria = craft()->elements->getCriteria(ElementType::Entry);
+            $criteria->id = $element->entryId;
+            $entry = $criteria->first();
+            $cpEditUrl = $entry->getCpEditUrl();
+            return '<a href="' . $cpEditUrl . '" data-icon="section"></a>';
+            break;
+          case 'categoryId':
+            $criteria = craft()->elements->getCriteria(ElementType::Category);
+            $criteria->id = $element->categoryId;
+            $entry = $criteria->first();
+            $cpEditUrl = $entry->getCpEditUrl();
+            return '<a href="' . $cpEditUrl . '" data-icon="categories"></a>';
+            break;
+          case 'assetId':
+            $file       = craft()->assets->getFileById($element->assetId);
+            $sourceType = craft()->assetSources->getSourceTypeById($file->sourceId);
+            $asset = AssetsHelper::generateUrl($sourceType, $file);
+            return '<a href="' . $asset . '" data-icon="assets"></a>';
+            break;
+          default:
+            return '';
+        }
+        break;
       default:
       {
         return parent::getTableAttributeHtml($element, $attribute);
@@ -168,27 +196,6 @@ class Navee_NodeElementType extends BaseElementType {
     {
       $query->andWhere(DbHelper::parseParam('navigations.handle', $criteria->navigation, $query->params));
     }
-
-//    if ($criteria->navigationHandle)
-//    {
-//      $query->andWhere(DbHelper::parseParam('navigations.handle', $criteria->navigationHandle, $query->params));
-//    }
-//
-//    if ($criteria->calendar)
-//    {
-//      $query->join('events_calendars events_calendars', 'events_calendars.id = events.calendarId');
-//      $query->andWhere(DbHelper::parseParam('events_calendars.handle', $criteria->calendar, $query->params));
-//    }
-//
-//    if ($criteria->startDate)
-//    {
-//      $query->andWhere(DbHelper::parseDateParam('events.startDate', $criteria->startDate, $query->params));
-//    }
-//
-//    if ($criteria->endDate)
-//    {
-//      $query->andWhere(DbHelper::parseDateParam('events.endDate', $criteria->endDate, $query->params));
-//    }
   }
 
   /**

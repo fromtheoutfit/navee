@@ -68,6 +68,7 @@ class Navee_NodeModel extends BaseElementModel {
       return UrlHelper::getCpUrl('navee/node/' . $navigation->handle . '/' . $this->id);
     }
   }
+  
 
   /**
    * Returns the field layout used by this element.
