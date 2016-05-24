@@ -15,32 +15,34 @@ class Navee_NodeModel extends BaseElementModel {
   protected function defineAttributes()
   {
     return array_merge(parent::defineAttributes(), array(
-      'navigationId'        => AttributeType::Number,
-      'linkType'            => array(AttributeType::Enum, 'values' => ['entryId', 'assetId', 'categoryId', 'customUri', 'none']),
-      'entryId'             => AttributeType::Number,
-      'assetId'             => AttributeType::Number,
-      'categoryId'          => AttributeType::Number,
-      'customUri'           => array(AttributeType::String, 'default' => ''),
-      'class'               => array(AttributeType::String, 'default' => ''),
-      'idAttr'              => array(AttributeType::String, 'default' => ''),
-      'rel'                 => array(AttributeType::String, 'default' => ''),
-      'name'                => array(AttributeType::String, 'default' => ''),
-      'titleAttr'           => array(AttributeType::String, 'default' => ''),
-      'accessKey'           => array(AttributeType::String, 'default' => ''),
-      'target'              => array(AttributeType::String, 'default' => ''),
-      'includeInNavigation' => array(AttributeType::Bool, 'default' => true),
-      'passive'             => array(AttributeType::Bool, 'default' => false),
-      'active'              => array(AttributeType::Bool, 'default' => false),
-      'ancestorActive'      => array(AttributeType::Bool, 'default' => false),
-      'descendantActive'    => array(AttributeType::Bool, 'default' => false),
-      'entryEnabled'      => array(AttributeType::Bool, 'default' => false),
-      'link'                => array(AttributeType::String, 'default' => ''),
-      'text'                => array(AttributeType::String, 'default' => ''),
-      'entryLink'           => array(AttributeType::String, 'default' => ''),
-      'categoryLink'        => array(AttributeType::String, 'default' => ''),
-      'newParentId'         => AttributeType::Number,
-      'siblingActive'       => array(AttributeType::Bool, 'default' => false),
-      'userGroups'          => array(AttributeType::Mixed, 'default' => ''),
+      'navigationId'           => AttributeType::Number,
+      'linkType'               => array(AttributeType::Enum, 'values' => ['entryId', 'assetId', 'categoryId', 'customUri', 'none']),
+      'entryId'                => AttributeType::Number,
+      'assetId'                => AttributeType::Number,
+      'categoryId'             => AttributeType::Number,
+      'customUri'              => array(AttributeType::String, 'default' => ''),
+      'class'                  => array(AttributeType::String, 'default' => ''),
+      'idAttr'                 => array(AttributeType::String, 'default' => ''),
+      'rel'                    => array(AttributeType::String, 'default' => ''),
+      'name'                   => array(AttributeType::String, 'default' => ''),
+      'titleAttr'              => array(AttributeType::String, 'default' => ''),
+      'accessKey'              => array(AttributeType::String, 'default' => ''),
+      'target'                 => array(AttributeType::String, 'default' => ''),
+      'includeInNavigation'    => array(AttributeType::Bool, 'default' => true),
+      'passive'                => array(AttributeType::Bool, 'default' => false),
+      'active'                 => array(AttributeType::Bool, 'default' => false),
+      'ancestorActive'         => array(AttributeType::Bool, 'default' => false),
+      'descendantActive'       => array(AttributeType::Bool, 'default' => false),
+      'entryEnabled'           => array(AttributeType::Bool, 'default' => false),
+      'link'                   => array(AttributeType::String, 'default' => ''),
+      'text'                   => array(AttributeType::String, 'default' => ''),
+      'entryLink'              => array(AttributeType::String, 'default' => ''),
+      'categoryLink'           => array(AttributeType::String, 'default' => ''),
+      'newParentId'            => AttributeType::Number,
+      'siblingActive'          => array(AttributeType::Bool, 'default' => false),
+      'userGroups'             => array(AttributeType::Mixed, 'default' => ''),
+      'linkedElementCpEditUrl' => array(AttributeType::String, 'default' => ''),
+      'linkedElementType'      => array(AttributeType::String, 'default' => ''),
     ));
   }
 
@@ -68,7 +70,7 @@ class Navee_NodeModel extends BaseElementModel {
       return UrlHelper::getCpUrl('navee/node/' . $navigation->handle . '/' . $this->id);
     }
   }
-  
+
 
   /**
    * Returns the field layout used by this element.

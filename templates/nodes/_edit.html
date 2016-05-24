@@ -225,6 +225,12 @@
 
       {% if node.id %}
       <div class="pane lightpane meta">
+        {% if node.linkedElementCpEditUrl %}
+          <div class="data">
+            <h5 class="heading">{{ "Element"|t }}</h5>
+            <div class="value"><a href="{{ node.linkedElementCpEditUrl }}">Edit {{ node.linkedElementType }}</a></div>
+          </div>
+        {% endif %}
         <div class="data">
           <h5 class="heading">{{ "Date Created"|t }}</h5>
           <div class="value">{{ node.dateCreated.localeDate() }} {{ node.dateCreated.localeTime() }}</div>

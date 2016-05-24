@@ -4,6 +4,8 @@
     "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/master.zip",
     "date": "2016-05-18T10:11:00-05:00",
     "notes": [
+      "[Added] Link to elements edit page in the CP from the main navigations page.",
+      "[Added] Link to elements edit page in the CP from the individual node page.",
       "[Added] Heads up display editor from navigation landing page now allows user to change node text as well as switch between different link types."
     ]
   },

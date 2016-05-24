@@ -128,6 +128,26 @@ class Navee_NodeController extends BaseController {
       $variables['entryElements'][]    = craft()->entries->getEntryById($variables['node']->entryId);
       $variables['assetElements'][]    = craft()->assets->getFileById($variables['node']->assetId);
       $variables['categoryElements'][] = craft()->categories->getCategoryById($variables['node']->categoryId);
+      
+      // get a link to the element in the cp if it is an entry or category
+      switch ($variables['node']->linkType)
+      {
+        case 'entryId':
+          $criteria = craft()->elements->getCriteria(ElementType::Entry);
+          $criteria->id = $variables['node']->entryId;
+          $entry = $criteria->first();
+          $variables['node']->linkedElementCpEditUrl = $entry->getCpEditUrl();
+          $variables['node']->linkedElementType = 'Entry';
+          break;
+        case 'categoryId':
+          $criteria = craft()->elements->getCriteria(ElementType::Category);
+          $criteria->id = $variables['node']->categoryId;
+          $entry = $criteria->first();
+          $variables['node']->linkedElementCpEditUrl = $entry->getCpEditUrl();
+          $variables['node']->linkedElementType = 'Category';
+          break;
+      }
+      
     }
 
     if ($variables['navigation']->maxLevels != 1)
