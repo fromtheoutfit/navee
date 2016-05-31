@@ -1,4 +1,4 @@
-<{{ config.wrapType }}>
+<{{ config.wrapType }}{% if config.class %} class="{{ config.class }}"{% endif %}{% if config.id %} id="{{ config.id }}"{% endif %}>
 {% nav node in nodes %}
   <li{% if node.class %} class="{{ node.class }}"{% endif %}{% if node.idAttr %} id="{{ node.idAttr }}"{% endif %}>
     <a href="{{ node.link }}"{% if node.name %} name="{{ node.name }}"{% endif %}{% if node.rel %} rel="{{ node.rel }}"{% endif %}{% if node.titleAttr %} title="{{ node.titleAttr }}"{% endif %}{% if node.accessKey %} accesskey="{{ node.accessKey }}"{% endif %}{% if node.target %} target="{{ node.target }}"{% endif %}>{{ node.title }}</a>

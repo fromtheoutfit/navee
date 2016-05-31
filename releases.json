@@ -1,5 +1,13 @@
 [
   {
+    "version": "1.0.4",
+    "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/v1.0.4.zip",
+    "date": "2016-05-31T15:02:00-05:00",
+    "notes": [
+      "[Fixed] Issue with class and id parameters not getting added in the craft.navee.nav() approach."
+    ]
+  },
+  {
     "version": "1.0.3",
     "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/v1.0.3.zip",
     "date": "2016-05-24T10:02:00-05:00",
