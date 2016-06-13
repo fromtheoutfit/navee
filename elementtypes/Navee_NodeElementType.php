@@ -321,7 +321,7 @@ class Navee_NodeElementType extends BaseElementType {
       $newChildAction->setParams(array(
         'label'       => Craft::t('Create a new child node'),
         'maxLevels'   => $structure->maxLevels,
-        'newChildUrl' => 'navee/navigations/' . $navigation->handle . '/new',
+        'newChildUrl' => 'navee/node/' . $navigation->handle . '/new',
       ));
       $actions[] = $newChildAction;
     }
