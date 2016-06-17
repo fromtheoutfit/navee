@@ -125,6 +125,7 @@ class Navee_NodeElementType extends BaseElementType {
           case 'entryId':
             $criteria = craft()->elements->getCriteria(ElementType::Entry);
             $criteria->id = $element->entryId;
+            $criteria->status = array(EntryModel::LIVE, EntryModel::PENDING, EntryModel::EXPIRED, EntryModel::ARCHIVED, EntryModel::DISABLED, EntryModel::ENABLED);
             $entry = $criteria->first();
             $cpEditUrl = $entry->getCpEditUrl();
             return '<a href="' . $cpEditUrl . '" data-icon="section"></a>';
