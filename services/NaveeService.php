@@ -534,6 +534,7 @@ class NaveeService extends BaseApplicationComponent {
       }
     }
 
+    $nodes = $this->rebuildNestedSet($nodes);
     return $nodes;
   }
 
@@ -551,6 +552,33 @@ class NaveeService extends BaseApplicationComponent {
     $data = ($node->lft >= $rootNode->lft && $node->rgt <= $rootNode->rgt) ? true : false;
 
     return $data;
+  }
+
+  /**
+   * Rebuilds the nested set after elements have been removed
+   *
+   * @access private
+   * @param array $nodes
+   * @return array
+   */
+
+  private function rebuildNestedSet($nodes)
+  {
+    foreach($nodes as $k => $v)
+    {
+
+      if (isset($prevIndex) && ((int) $nodes[$prevIndex]->lft + 1 !== (int) $nodes[$prevIndex]->rgt))
+      {
+        if ((int) $nodes[$prevIndex]->lft + 1 !== (int) $v->lft)
+        {
+          $nodes[$prevIndex]->rgt = $nodes[$prevIndex]->lft + 1;
+        }
+      }
+
+      $prevIndex = $k;
+
+    }
+    return $nodes;
   }
 
 }
