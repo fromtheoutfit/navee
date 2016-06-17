@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.6",
+    "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/v1.0.6.zip",
+    "date": "2016-06-16T15:14:18-05:00",
+    "notes": [
+      "[Added] A rebuild of the nested set to ensure that hasDescendants() does not return a false positive after nodes have been removed.",
+      "[Fixed] Issue with nodes linked to disabled entries not showing up in the CP.",
+      "[Fixed] Issue with nodes linked to disabled categories not showing up in the CP."
+    ]
+  },
+  {
     "version": "1.0.5",
     "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/v1.0.5.zip",
     "date": "2016-06-13T15:12:35-05:00",
