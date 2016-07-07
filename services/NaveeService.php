@@ -147,7 +147,7 @@ class NaveeService extends BaseApplicationComponent {
   private function nodeActive(Navee_NodeModel $node)
   {
     $data       = false;
-    $currentUri = ltrim(craft()->request->getRequestUri(), '/');
+    $currentUri = ltrim(craft()->request->getPath(), '/');
     $link       = ltrim($node->link, '/');
 
     if (($link == $currentUri) && !$node->passive)
