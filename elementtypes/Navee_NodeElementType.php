@@ -130,22 +130,38 @@ class Navee_NodeElementType extends BaseElementType {
             if (!$entry) {
               return '<a href="#" data-icon="alert"></a>';
             }
-            $cpEditUrl = $entry->getCpEditUrl();
-            return '<a href="' . $cpEditUrl . '" data-icon="section"></a>';
+            else
+            {
+              $cpEditUrl = $entry->getCpEditUrl();
+              return '<a href="' . $cpEditUrl . '" data-icon="section"></a>';
+            }
             break;
           case 'categoryId':
             $criteria = craft()->elements->getCriteria(ElementType::Category);
             $criteria->id = $element->categoryId;
             $criteria->status = array(CategoryModel::ENABLED, CategoryModel::DISABLED, CategoryModel::ARCHIVED);
             $entry = $criteria->first();
-            $cpEditUrl = $entry->getCpEditUrl();
-            return '<a href="' . $cpEditUrl . '" data-icon="categories"></a>';
+            if (!$entry) {
+              return '<a href="#" data-icon="alert"></a>';
+            }
+            else
+            {
+              $cpEditUrl = $entry->getCpEditUrl();
+              return '<a href="' . $cpEditUrl . '" data-icon="categories"></a>';
+            }
             break;
           case 'assetId':
             $file       = craft()->assets->getFileById($element->assetId);
-            $sourceType = craft()->assetSources->getSourceTypeById($file->sourceId);
-            $asset = AssetsHelper::generateUrl($sourceType, $file);
-            return '<a href="' . $asset . '" data-icon="assets"></a>';
+            if (!$file)
+            {
+              return '<a href="#" data-icon="alert"></a>';
+            }
+            else
+            {
+              $sourceType = craft()->assetSources->getSourceTypeById($file->sourceId);
+              $asset = AssetsHelper::generateUrl($sourceType, $file);
+              return '<a href="' . $asset . '" data-icon="assets"></a>';
+            }
             break;
           default:
             return '';
