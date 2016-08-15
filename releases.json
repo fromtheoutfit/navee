@@ -1,5 +1,14 @@
 [
   {
+    "version": "1.0.7",
+    "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/v1.0.7.zip",
+    "date": "2016-08-15T11:15:18-05:00",
+    "notes": [
+      "[Fixed] Fixed issue with cmd+s ending in a 404.",
+      "[Fixed] Issue with getDescendants() not including link."
+    ]
+  },
+  {
     "version": "1.0.6",
     "downloadUrl": "https://github.com/fromtheoutfit/navee/archive/v1.0.6.zip",
     "date": "2016-06-16T15:14:18-05:00",

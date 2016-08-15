@@ -10,7 +10,7 @@ class NaveePlugin extends BasePlugin {
 
   public function getVersion()
   {
-    return '1.0.6';
+    return '1.0.7';
   }
 
   public function getDeveloper()

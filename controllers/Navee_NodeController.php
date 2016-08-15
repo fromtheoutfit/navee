@@ -214,7 +214,7 @@ class Navee_NodeController extends BaseController {
     );
 
     // Set the "Continue Editing" URL
-    $variables['continueEditingUrl'] = 'navee/' . $variables['navigation']->handle . '/{id}';
+    $variables['continueEditingUrl'] = 'navee/node/' . $variables['navigation']->handle . '/{id}';
 
     // Render the template!
     $this->renderTemplate('navee/nodes/_edit', $variables);
