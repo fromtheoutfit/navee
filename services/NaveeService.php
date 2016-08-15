@@ -107,12 +107,12 @@ class NaveeService extends BaseApplicationComponent {
   /**
    * Sets the link of a node based on the node type
    *
-   * @access private
+   * @access public
    * @param Navee_NodeModel $node
    * @return Navee_NodeModel
    */
 
-  private function setLink(Navee_NodeModel $node)
+  public function setLink(Navee_NodeModel $node)
   {
     switch ($node->linkType)
     {

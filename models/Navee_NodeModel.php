@@ -119,4 +119,21 @@ class Navee_NodeModel extends BaseElementModel {
 
     return $data;
   }
+
+  /**
+   * Adding links to the base getDescendants functionality
+   *
+   * @param null $dist
+   * @return ElementCriteriaModel
+   */
+
+  public function getDescendants($dist = null)
+  {
+    $descendants = parent::getDescendants($dist);
+    foreach ($descendants as $d)
+    {
+      craft()->navee->setLink($d);
+    }
+    return $descendants;
+  }
 }
