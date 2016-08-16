@@ -127,8 +127,16 @@ class NaveeService extends BaseApplicationComponent {
         break;
       case 'assetId':
         $file       = craft()->assets->getFileById($node->assetId);
-        $sourceType = craft()->assetSources->getSourceTypeById($file->sourceId);
-        $node->link = AssetsHelper::generateUrl($sourceType, $file);
+        if ($file)
+        {
+          $sourceType = craft()->assetSources->getSourceTypeById($file->sourceId);
+          $node->link = AssetsHelper::generateUrl($sourceType, $file);
+        }
+        else
+        {
+          $node->link = '';
+        }
+
         break;
     }
 
@@ -399,6 +407,20 @@ class NaveeService extends BaseApplicationComponent {
       if (($this->config->startWithActive || $this->config->startWithSiblingsOfActive) && $this->config->maxDepth)
       {
         $this->config->maxDepth = $activeNode->level + $this->config->maxDepth - 1;
+      }
+
+    }
+    else
+    {
+      // There are no active nodes - which means that we should return an empty array
+      // if any of the parameters that are dependant on an active node have been passed
+      if ($this->config->startWithActive ||
+          $this->config->startWithAncestorOfActive ||
+          $this->config->startWithChildrenOfActive ||
+          $this->config->startWithSiblingsOfActive ||
+          $this->config->startXLevelsAboveActive)
+      {
+        return array();
       }
 
     }
