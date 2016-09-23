@@ -2,6 +2,7 @@
 namespace Craft;
 
 /**
+ * Thanks to nycstudio107 for the migration blueprint. ;)
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
 class m160922_150924_navee_AddRegexField extends BaseMigration {
@@ -40,18 +41,9 @@ class m160922_150924_navee_AddRegexField extends BaseMigration {
           $afterColumnHandle
         );
 
-        // log that we created the new column
-        SeomaticPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);
 
       }
 
-      // if the column already exists in the table
-      else {
-
-        // tell craft that we couldn't create the column as it alredy exists.
-        SeomaticPlugin::log("Column `$columnName` already exists in the `$tableName` table.", LogLevel::Info, true);
-
-      }
     }
   }
 }
