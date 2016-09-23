@@ -133,20 +133,21 @@ class Navee_NodeController extends BaseController {
       switch ($variables['node']->linkType)
       {
         case 'entryId':
-          $criteria = craft()->elements->getCriteria(ElementType::Entry);
+          $criteria     = craft()->elements->getCriteria(ElementType::Entry);
           $criteria->id = $variables['node']->entryId;
-          $entry = $criteria->first();
-          if ($entry) {
+          $entry        = $criteria->first();
+          if ($entry)
+          {
             $variables['node']->linkedElementCpEditUrl = $entry->getCpEditUrl();
           }
           $variables['node']->linkedElementType = 'Entry';
           break;
         case 'categoryId':
-          $criteria = craft()->elements->getCriteria(ElementType::Category);
-          $criteria->id = $variables['node']->categoryId;
-          $entry = $criteria->first();
+          $criteria                                  = craft()->elements->getCriteria(ElementType::Category);
+          $criteria->id                              = $variables['node']->categoryId;
+          $entry                                     = $criteria->first();
           $variables['node']->linkedElementCpEditUrl = $entry->getCpEditUrl();
-          $variables['node']->linkedElementType = 'Category';
+          $variables['node']->linkedElementType      = 'Category';
           break;
       }
 
@@ -254,6 +255,7 @@ class Navee_NodeController extends BaseController {
     $node->name                = (craft()->request->getPost('name')) ? craft()->request->getPost('name') : '';
     $node->titleAttr           = (craft()->request->getPost('titleAttr')) ? craft()->request->getPost('titleAttr') : '';
     $node->accessKey           = (craft()->request->getPost('accessKey')) ? craft()->request->getPost('accessKey') : '';
+    $node->regex               = (craft()->request->getPost('regex')) ? craft()->request->getPost('regex') : '';
     $node->target              = (craft()->request->getPost('target')) ? craft()->request->getPost('target') : '';
     $node->includeInNavigation = (craft()->request->getPost('includeInNavigation')) ? craft()->request->getPost('includeInNavigation') : false;
     $node->passive             = (craft()->request->getPost('passive')) ? craft()->request->getPost('passive') : false;

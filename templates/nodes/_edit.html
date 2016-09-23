@@ -1,9 +1,11 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
+
 {% set navigationHandle = navigation.handle %}
 {% if craft.app.getEditionName() == 'Pro' %}
   {% set allGroups = craft.userGroups.getAllGroups() %}
 {% endif %}
+
 {% set fieldLayouts = navigation.getFieldLayout().getTabs() %}
 
 {% includeJsResource "navee/js/navee.js" %}
@@ -22,176 +24,213 @@
   <div class="grid first" data-max-cols="3">
     <div class="item" data-position="left" data-colspan="2">
       <div id="fields" class="pane">
-        {{ forms.textField({
-        label: 'Title'|t,
-        id: 'title',
-        name: 'title',
-        value: node.title,
-        errors: node.getErrors('title'),
-        first: true,
-        autofocus: true,
-        required: true
-        }) }}
-
-        {{ forms.selectField({
-        label: 'Link Type'|t,
-        id: 'linkType',
-        options: linkTypes,
-        name: 'linkType',
-        value: node.linkType,
-        required: true,
-        }) }}
-
-        {{ forms.elementSelectField({
-        label: 'Select Entry'|t,
-        id: 'entryId',
-        name: 'entryId',
-        elementType: entryElementType,
-        addButtonLabel: 'Choose Entry'|t,
-        elements: entryElements,
-        limit: 1
-        }) }}
-
-        {{ forms.textField({
-        label: 'Custom Uri'|t,
-        id: 'customUri',
-        name: 'customUri',
-        value: node.customUri,
-        errors: node.getErrors('customUri'),
-        required: false
-        }) }}
-
-        {% if assetSourcesExist %}
-        {{ forms.elementSelectField({
-        label: 'Select Asset'|t,
-        id: 'assetId',
-        name: 'assetId',
-        criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
-        elementType: assetElementType,
-        addButtonLabel: 'Choose Asset'|t,
-        elements: assetElements,
-        limit: 1,
-        }) }}
-        {% endif %}
-
-        {% if categoriesExist %}
-        {{ forms.elementSelectField({
-        label: 'Select Category'|t,
-        id: 'categoryId',
-        class: 'hidden',
-        name: 'categoryId',
-        elementType: categoryElementType,
-        addButtonLabel: 'Choose Category'|t,
-        elements: categoryElements,
-        limit: 1,
-        }) }}
-        {% endif %}
-
-        <hr/>
-
-        <h2>Attributes</h2>
-
-        {{ forms.textField({
-        label: 'Class'|t,
-        id: 'class',
-        name: 'class',
-        value: node.class,
-        errors: node.getErrors('class'),
-        required: false
-        }) }}
-
-        {{ forms.textField({
-        label: 'Id'|t,
-        id: 'idAttr',
-        name: 'idAttr',
-        value: node.idAttr,
-        errors: node.getErrors('idAttr'),
-        required: false
-        }) }}
-
-        {{ forms.textField({
-        label: 'Rel'|t,
-        id: 'rel',
-        name: 'rel',
-        value: node.rel,
-        errors: node.getErrors('rel'),
-        required: false
-        }) }}
-
-        {{ forms.textField({
-        label: 'Name'|t,
-        id: 'name',
-        name: 'name',
-        value: node.name,
-        errors: node.getErrors('name'),
-        required: false
-        }) }}
-
-        {{ forms.textField({
-        label: 'Title'|t,
-        id: 'titleAttr',
-        name: 'titleAttr',
-        value: node.titleAttr,
-        errors: node.getErrors('titleAttr'),
-        required: false
-        }) }}
-
-        {{ forms.textField({
-        label: 'Access Key'|t,
-        id: 'accessKey',
-        name: 'accessKey',
-        value: node.accessKey,
-        errors: node.getErrors('accessKey'),
-        required: false
-        }) }}
-
-        {{ forms.selectField({
-        label: 'Target'|t,
-        id: 'target',
-        options: {
-        '': 'None'|t,
-        '_blank': '_blank : Open in new window or tab'|t,
-        '_self': '_self : Open in same frame as it was clicked'|t,
-        '_parent': '_parent : Open in parent frame'|t,
-        '_top': '_top : Open in the full body of the window'|t,
-        },
-        name: 'target',
-        value: node.target,
-        required: false
-        }) }}
-
-
-        {% if fieldLayouts %}
-          <hr/>
-          <div>
+        <nav id="tabs" class="tabs">
+          <ul>
+            <li>
+              <a id="tab-0" class="tab sel" href="#tab1" tabindex="0">Node</a>
+            </li>
+            <li>
+              <a id="tab-1" class="tab" href="#tab2" tabindex="1">Attributes</a>
+            </li>
+            <li>
+              <a id="tab-2" class="tab" href="#tab3" tabindex="2">Advanced</a>
+            </li>
+            {% if fieldLayouts %}
             {% for tab in fieldLayouts %}
-            <div id="tab{{ loop.index }}" {% if not loop.first %} class="hidden" {% endif %}>
-              {% include "_includes/fields" with {
-              fields: tab.getFields(),
-              element: node
-              } only %}
-            </div>
+            <li>
+              <a id="tab-{{ loop.index + 3 }}" class="tab" href="#tab{{ loop.index + 3 }}" tabindex="{{ loop.index + 2 }}">{{ tab.name }}</a>
+            </li>
             {% endfor %}
-          </div>
-        {% endif %}
+            {% endif %}
 
-        {% if craft.app.getEditionName() == 'Pro' and allGroups %}
-        <hr />
-        <h2>User Groups</h2>
-        <p>Limit this node to only User Groups selected below.</p>
-        <ul>
-          {% for group in allGroups %}
-          <li>
-            {{ forms.checkbox({
-            label: group.name|t,
-            name: 'userGroups[]',
-            value: group.id,
-            checked: node.userGroupSelected(group.id),
+          </ul>
+        </nav>
+        <div>
+          <div id="tab1">
+            {{ forms.textField({
+            label: 'Title'|t,
+            id: 'title',
+            name: 'title',
+            value: node.title,
+            errors: node.getErrors('title'),
+            first: true,
+            autofocus: true,
+            required: true
             }) }}
-          </li>
+
+            {{ forms.selectField({
+            label: 'Link Type'|t,
+            id: 'linkType',
+            options: linkTypes,
+            name: 'linkType',
+            value: node.linkType,
+            required: true,
+            }) }}
+
+            {{ forms.elementSelectField({
+            label: 'Select Entry'|t,
+            id: 'entryId',
+            name: 'entryId',
+            elementType: entryElementType,
+            addButtonLabel: 'Choose Entry'|t,
+            elements: entryElements,
+            limit: 1
+            }) }}
+
+            {{ forms.textField({
+            label: 'Custom Uri'|t,
+            id: 'customUri',
+            name: 'customUri',
+            value: node.customUri,
+            errors: node.getErrors('customUri'),
+            required: false
+            }) }}
+
+            {% if assetSourcesExist %}
+            {{ forms.elementSelectField({
+            label: 'Select Asset'|t,
+            id: 'assetId',
+            name: 'assetId',
+            criteria: {"kind":[],"localeEnabled":null,"locale":"en_us"},
+            elementType: assetElementType,
+            addButtonLabel: 'Choose Asset'|t,
+            elements: assetElements,
+            limit: 1,
+            }) }}
+            {% endif %}
+
+            {% if categoriesExist %}
+            {{ forms.elementSelectField({
+            label: 'Select Category'|t,
+            id: 'categoryId',
+            class: 'hidden',
+            name: 'categoryId',
+            elementType: categoryElementType,
+            addButtonLabel: 'Choose Category'|t,
+            elements: categoryElements,
+            limit: 1,
+            }) }}
+            {% endif %}
+          </div>
+          <div id="tab2" class="hidden">
+            {{ forms.textField({
+            label: 'Class'|t,
+            id: 'class',
+            name: 'class',
+            value: node.class,
+            errors: node.getErrors('class'),
+            required: false
+            }) }}
+
+            {{ forms.textField({
+            label: 'Id'|t,
+            id: 'idAttr',
+            name: 'idAttr',
+            value: node.idAttr,
+            errors: node.getErrors('idAttr'),
+            required: false
+            }) }}
+
+            {{ forms.textField({
+            label: 'Rel'|t,
+            id: 'rel',
+            name: 'rel',
+            value: node.rel,
+            errors: node.getErrors('rel'),
+            required: false
+            }) }}
+
+            {{ forms.textField({
+            label: 'Name'|t,
+            id: 'name',
+            name: 'name',
+            value: node.name,
+            errors: node.getErrors('name'),
+            required: false
+            }) }}
+
+            {{ forms.textField({
+            label: 'Title'|t,
+            id: 'titleAttr',
+            name: 'titleAttr',
+            value: node.titleAttr,
+            errors: node.getErrors('titleAttr'),
+            required: false
+            }) }}
+
+            {{ forms.textField({
+            label: 'Access Key'|t,
+            id: 'accessKey',
+            name: 'accessKey',
+            value: node.accessKey,
+            errors: node.getErrors('accessKey'),
+            required: false
+            }) }}
+
+            {{ forms.selectField({
+            label: 'Target'|t,
+            id: 'target',
+            options: {
+            '': 'None'|t,
+            '_blank': '_blank : Open in new window or tab'|t,
+            '_self': '_self : Open in same frame as it was clicked'|t,
+            '_parent': '_parent : Open in parent frame'|t,
+            '_top': '_top : Open in the full body of the window'|t,
+            },
+            name: 'target',
+            value: node.target,
+            required: false
+            }) }}
+
+          </div>
+
+          <div id="tab3" class="hidden">
+            {{ forms.textField({
+            label: 'Regular Expression'|t,
+            instructions: 'Regex pattern for advanced selected states'|t |raw,
+            id: 'regex',
+            name: 'regex',
+            value: node.regex,
+            errors: node.getErrors('regex'),
+            required: false
+            }) }}
+            {% if craft.app.getEditionName() == 'Pro' and allGroups %}
+
+            <div class="field">
+              <div class="heading">
+                <label>User Groups</label>
+                <div class="instructions">
+                  <p>Limit this node to only User Groups selected below.</p>
+                </div>
+              </div>
+              <ul>
+                {% for group in allGroups %}
+                <li>
+                  {{ forms.checkbox({
+                  label: group.name|t,
+                  name: 'userGroups[]',
+                  value: group.id,
+                  checked: node.userGroupSelected(group.id),
+                  }) }}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+          {% if fieldLayouts %}
+
+          {% for tab in fieldLayouts %}
+          <div id="tab{{ loop.index + 3 }}" class="hidden">
+            {% include "_includes/fields" with {
+            fields: tab.getFields(),
+            element: node
+            } only %}
+          </div>
           {% endfor %}
-        </ul>
-        {% endif %}
+          {% endif %}
+
+        </div>
       </div>
     </div>
     <div class="item" data-position="right">

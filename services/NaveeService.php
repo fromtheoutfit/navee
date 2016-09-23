@@ -158,10 +158,35 @@ class NaveeService extends BaseApplicationComponent {
     $currentUri = ltrim(craft()->request->getPath(), '/');
     $link       = ltrim($node->link, '/');
 
-    if (($link == $currentUri) && !$node->passive)
+    if (!$node->passive)
     {
-      $node->active = true;
-      $data         = true;
+      if ($link == $currentUri || $this->nodeActiveRegex($node, $currentUri))
+      {
+        $node->active = true;
+        $data         = true;
+      }
+    }
+
+
+    return $data;
+  }
+
+  /**
+   * Checks to see if a node regex matches the current URI
+   *
+   * @access private
+   * @param Navee_NodeModel $node
+   * @param string $currentUri
+   * @return boolean
+   */
+
+  private function nodeActiveRegex(Navee_NodeModel $node, $currentUri)
+  {
+    $data = false;
+
+    if (strlen($node->regex) && preg_match($node->regex, $currentUri))
+    {
+      $data = true;
     }
 
     return $data;

@@ -43,6 +43,7 @@ class Navee_NodeModel extends BaseElementModel {
       'userGroups'             => array(AttributeType::Mixed, 'default' => ''),
       'linkedElementCpEditUrl' => array(AttributeType::String, 'default' => ''),
       'linkedElementType'      => array(AttributeType::String, 'default' => ''),
+      'regex'                  => array(AttributeType::String, 'default' => ''),
     ));
   }
 
@@ -134,6 +135,7 @@ class Navee_NodeModel extends BaseElementModel {
     {
       craft()->navee->setLink($d);
     }
+
     return $descendants;
   }
 }

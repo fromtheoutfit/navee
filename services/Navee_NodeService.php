@@ -80,6 +80,7 @@ class Navee_NodeService extends BaseApplicationComponent {
     $nodeRecord->name                = $node->name;
     $nodeRecord->titleAttr           = $node->titleAttr;
     $nodeRecord->accessKey           = $node->accessKey;
+    $nodeRecord->regex               = $node->regex;
     $nodeRecord->target              = $node->target;
     $nodeRecord->includeInNavigation = $node->includeInNavigation;
     $nodeRecord->passive             = $node->passive;
