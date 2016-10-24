@@ -131,10 +131,26 @@ class Navee_NodeModel extends BaseElementModel {
   public function getDescendants($dist = null)
   {
     $descendants = parent::getDescendants($dist);
+
+    // variables
+    $activeNodes = array();
+
     foreach ($descendants as $d)
     {
       craft()->navee->setLink($d);
+
+      if (craft()->navee->nodeActive($d))
+      {
+        $activeNodes[] = $d;
+      }
     }
+
+    if (sizeof($activeNodes))
+    {
+      $descendants = craft()->navee->setActiveNodeRelatives($descendants, $activeNodes);
+    }
+
+    $descendants = craft()->navee->setActiveClasses($descendants);
 
     return $descendants;
   }

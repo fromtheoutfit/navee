@@ -147,12 +147,12 @@ class NaveeService extends BaseApplicationComponent {
   /**
    * Checks to see if a node is active
    *
-   * @access private
+   * @access public
    * @param Navee_NodeModel $node
    * @return bool
    */
 
-  private function nodeActive(Navee_NodeModel $node)
+  public function nodeActive(Navee_NodeModel $node)
   {
     $data       = false;
     $currentUri = ltrim(craft()->request->getPath(), '/');
@@ -270,13 +270,13 @@ class NaveeService extends BaseApplicationComponent {
   /**
    * Sets flags in the relatives of active nodes marking them ancestors/descendants
    *
-   * @access private
+   * @access public
    * @param array $nodes
    * @param array $activeNodes
    * @return array
    */
 
-  private function setActiveNodeRelatives($nodes = array(), $activeNodes = array())
+  public function setActiveNodeRelatives($nodes = array(), $activeNodes = array())
   {
     foreach ($nodes as $node)
     {
@@ -336,12 +336,12 @@ class NaveeService extends BaseApplicationComponent {
   /**
    * Sets appropriate active classes for each node
    *
-   * @access private
+   * @access public
    * @param array $nodes
    * @return array
    */
 
-  private function setActiveClasses($nodes = array())
+  public function setActiveClasses($nodes = array())
   {
     if (!$this->config->disableActiveClass)
     {
@@ -350,12 +350,14 @@ class NaveeService extends BaseApplicationComponent {
         // this is the active node
         if ($node->active)
         {
+          $node->class = str_replace($this->config->activeClass, '', $node->class);
           $node->class = (strlen($node->class)) ? $node->class . ' ' . $this->config->activeClass : $this->config->activeClass;
         }
 
         // these are ancestors of the active node
         if ($this->config->activeClassOnAncestors && $node->descendantActive)
         {
+          $node->class = str_replace($this->config->ancestorActiveClass, '', $node->class);
           $node->class = (strlen($node->class)) ? $node->class . ' ' . $this->config->ancestorActiveClass : $this->config->ancestorActiveClass;
         }
 
