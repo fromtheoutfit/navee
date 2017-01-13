@@ -17,7 +17,6 @@ class NaveeService extends BaseApplicationComponent {
   public function __construct()
   {
     $this->config = new Navee_ConfigModel();
-
   }
 
   /**
@@ -41,7 +40,15 @@ class NaveeService extends BaseApplicationComponent {
   public function getNav($navigationHandle)
   {
     // get the nodes for this navigation
-    $criteria             = craft()->elements->getCriteria('Navee_Node');
+    if ($this->config->reverseNodes)
+    {
+      $criteria = craft()->elements->getCriteria('Navee_Node')->limit(null)->order('lft desc');
+    }
+    else
+    {
+      $criteria = craft()->elements->getCriteria('Navee_Node')->limit(null);
+    }
+
     $criteria->navigation = $navigationHandle;
     $nodes                = $criteria->find();
     $removedNodes         = array();
@@ -58,7 +65,7 @@ class NaveeService extends BaseApplicationComponent {
       foreach ($nodes as $k => $node)
       {
         // Set the link for this node based on the type
-        $node = $this->setLink($node);
+        $node       = $this->setLink($node);
         $node->text = $node->title;
 
         // Check to see if this node should be removed because it
@@ -99,6 +106,9 @@ class NaveeService extends BaseApplicationComponent {
       // now let's limit the nav based on which parameters are passed
       $nodes = $this->getSubsetOfNodes($nodes, $activeNodes);
 
+      // Mark all nodes that have children
+      $nodes = $this->setHasChildren($nodes);
+
     }
 
     return $nodes;
@@ -126,7 +136,7 @@ class NaveeService extends BaseApplicationComponent {
         $node->link = $node->customUri;
         break;
       case 'assetId':
-        $file       = craft()->assets->getFileById($node->assetId);
+        $file = craft()->assets->getFileById($node->assetId);
         if ($file)
         {
           $sourceType = craft()->assetSources->getSourceTypeById($file->sourceId);
@@ -176,7 +186,7 @@ class NaveeService extends BaseApplicationComponent {
    *
    * @access private
    * @param Navee_NodeModel $node
-   * @param string $currentUri
+   * @param string          $currentUri
    * @return boolean
    */
 
@@ -365,6 +375,17 @@ class NaveeService extends BaseApplicationComponent {
     return $nodes;
   }
 
+  private function setHasChildren($nodes)
+  {
+    foreach ($nodes as $node)
+    {
+      $node->hasChildren = (((int) $node->rgt - $node->lft) > 1) ? true : false;
+
+    }
+
+    return $nodes;
+  }
+
   private function getUserGroupIdArray()
   {
     $data        = array();
@@ -440,10 +461,12 @@ class NaveeService extends BaseApplicationComponent {
       // There are no active nodes - which means that we should return an empty array
       // if any of the parameters that are dependant on an active node have been passed
       if ($this->config->startWithActive ||
-          $this->config->startWithAncestorOfActive ||
-          $this->config->startWithChildrenOfActive ||
-          $this->config->startWithSiblingsOfActive ||
-          $this->config->startXLevelsAboveActive)
+        $this->config->startWithAncestorOfActive ||
+        $this->config->startWithChildrenOfActive ||
+        $this->config->startWithSiblingsOfActive ||
+        $this->config->startXLevelsAboveActive ||
+        $this->config->breadcrumbs
+      )
       {
         return array();
       }
@@ -454,12 +477,25 @@ class NaveeService extends BaseApplicationComponent {
     {
       if (!isset($rootNode))
       {
-        if ($node->level == 1 && ($node->descendantActive || $node->active))
+        if ($this->config->startWithNodeId || $this->config->startWithChildrenOfNodeId)
+        {
+          if ((int) $node->id == (int) $this->config->startWithNodeId
+            || (int) $node->id == (int) $this->config->startWithChildrenOfNodeId)
+          {
+            $rootNode = $node;
+            break;
+          }
+        }
+        elseif ($node->level == 1 && ($node->descendantActive || $node->active))
         {
           $rootNode = $node;
+          break;
         }
       }
+    }
 
+    foreach ($nodes as $k => $node)
+    {
       // Check to see if this node should be removed because it
       // is a descendant of a previously removed node
       if ($this->ancestorRemoved($node, $removedNodes))
@@ -528,6 +564,24 @@ class NaveeService extends BaseApplicationComponent {
             continue;
           }
         }
+        // start with a given node id
+        elseif ((int) $this->config->startWithNodeId && isset($rootNode))
+        {
+          if ($node->lft <= $rootNode->lft || $node->rgt >= $rootNode->rgt)
+          {
+            unset($nodes[$k]);
+            continue;
+          }
+        }
+        // start with children of a given node id
+        elseif ((int) $this->config->startWithChildrenOfNodeId && isset($rootNode))
+        {
+          if ($node->lft < $rootNode->lft || $node->rgt > $rootNode->rgt)
+          {
+            unset($nodes[$k]);
+            continue;
+          }
+        }
         // start with the active node
         elseif ($this->config->startWithSiblingsOfActive)
         {
@@ -582,6 +636,7 @@ class NaveeService extends BaseApplicationComponent {
     }
 
     $nodes = $this->rebuildNestedSet($nodes);
+
     return $nodes;
   }
 
@@ -611,7 +666,7 @@ class NaveeService extends BaseApplicationComponent {
 
   private function rebuildNestedSet($nodes)
   {
-    foreach($nodes as $k => $v)
+    foreach ($nodes as $k => $v)
     {
 
       if (isset($prevIndex) && ((int) $nodes[$prevIndex]->lft + 1 !== (int) $nodes[$prevIndex]->rgt))
@@ -625,6 +680,7 @@ class NaveeService extends BaseApplicationComponent {
       $prevIndex = $k;
 
     }
+
     return $nodes;
   }
 

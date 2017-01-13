@@ -44,6 +44,7 @@ class Navee_NodeModel extends BaseElementModel {
       'linkedElementCpEditUrl' => array(AttributeType::String, 'default' => ''),
       'linkedElementType'      => array(AttributeType::String, 'default' => ''),
       'regex'                  => array(AttributeType::String, 'default' => ''),
+      'hasChildren'          => array(AttributeType::Bool, 'default' => false),
     ));
   }
 
