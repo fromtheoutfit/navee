@@ -127,13 +127,13 @@ class NaveeService extends BaseApplicationComponent {
     switch ($node->linkType)
     {
       case 'entryId':
-        $node->link = '/' . $node->entryLink;
+        $node->link = ($this->isHomepageEntry($node->entryLink)) ? '/' : '/' . $node->entryLink;
         break;
       case 'categoryId':
         $node->link = '/' . $node->categoryLink;
         break;
       case 'customUri':
-        $node->link = ($this->isGlobalUrl($node->customUri)) ? $this->getGlobalUrl($node->customUri) : $node->customUri;
+        $node->link = ($this->isGlobalVariable($node->customUri)) ? $this->getGlobalUrl($node->customUri) : $node->customUri;
         break;
       case 'assetId':
         $file = craft()->assets->getFileById($node->assetId);
@@ -154,8 +154,26 @@ class NaveeService extends BaseApplicationComponent {
 
   }
 
+  /**
+   * Determines if a linked entry is outputting __home__
+   *
+   * @access private
+   * @param $entryLink
+   * @return bool
+   */
+  private function isHomepageEntry($entryLink)
+  {
+    return ($entryLink == '__home__') ? true : false;
+  }
 
-  private function isGlobalUrl($customUri)
+  /**
+   * Determines if a custom uri matches a global variable
+   *
+   * @access private
+   * @param $customUri
+   * @return bool
+   */
+  private function isGlobalVariable($customUri)
   {
     $globalUrls = array('loginUrl', 'logoutUrl');
 
@@ -169,6 +187,13 @@ class NaveeService extends BaseApplicationComponent {
     return false;
   }
 
+  /**
+   * Replaces a global variable template string with the actual url
+   *
+   * @access private
+   * @param $customUri
+   * @return string
+   */
   private function getGlobalUrl($customUri)
   {
     $trimmedUri = $this->getGlobalVariableSlug($customUri);
@@ -187,6 +212,13 @@ class NaveeService extends BaseApplicationComponent {
 
   }
 
+  /**
+   * Trims out the {{ }} from a potential global variable
+   *
+   * @access private
+   * @param $customUri
+   * @return mixed|string
+   */
   private function getGlobalVariableSlug($customUri)
   {
     $replace = array('{', '}');
