@@ -133,7 +133,7 @@ class NaveeService extends BaseApplicationComponent {
         $node->link = '/' . $node->categoryLink;
         break;
       case 'customUri':
-        $node->link = $node->customUri;
+        $node->link = ($this->isGlobalUrl($node->customUri)) ? $this->getGlobalUrl($node->customUri) : $node->customUri;
         break;
       case 'assetId':
         $file = craft()->assets->getFileById($node->assetId);
@@ -152,6 +152,48 @@ class NaveeService extends BaseApplicationComponent {
 
     return $node;
 
+  }
+
+
+  private function isGlobalUrl($customUri)
+  {
+    $globalUrls = array('loginUrl', 'logoutUrl');
+
+    $customUri = $this->getGlobalVariableSlug($customUri);
+
+    if (in_array($customUri, $globalUrls))
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+  private function getGlobalUrl($customUri)
+  {
+    $trimmedUri = $this->getGlobalVariableSlug($customUri);
+
+    switch ($trimmedUri)
+    {
+      case 'loginUrl':
+        return UrlHelper::getUrl(craft()->config->getLoginPath());
+        break;
+      case 'logoutUrl':
+        return UrlHelper::getUrl(craft()->config->getLogoutPath());
+        break;
+      default:
+        return $customUri;
+    }
+
+  }
+
+  private function getGlobalVariableSlug($customUri)
+  {
+    $replace = array('{', '}');
+    $customUri = str_replace($replace, '', $customUri);
+    $customUri = trim($customUri);
+
+    return $customUri;
   }
 
   /**
