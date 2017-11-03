@@ -656,10 +656,11 @@ class NaveeService extends BaseApplicationComponent {
             continue;
           }
         }
-        // start with the active node
+        // start with siblings of the active node
         elseif ($this->config->startWithSiblingsOfActive)
         {
-          if (!$this->nodeInBranchOfActiveNode($rootNode, $node) && !$node->active)
+          if ((!$this->nodeInBranchOfActiveNode($rootNode, $node) && !$node->active)
+              || ($node->level < $activeNode->level && !$node->descendantActive))
           {
             array_push($removedNodes, $node);
             unset($nodes[$k]);
