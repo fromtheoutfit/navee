@@ -690,8 +690,9 @@ class NaveeService extends BaseApplicationComponent {
 
         }
       }
+      
       // start with a given node id
-      elseif ((int) $this->config->startWithNodeId && isset($rootNode))
+      if ((int) $this->config->startWithNodeId && isset($rootNode))
       {
         if ($node->lft <= $rootNode->lft || $node->rgt >= $rootNode->rgt)
         {
