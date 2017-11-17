@@ -638,24 +638,6 @@ class NaveeService extends BaseApplicationComponent {
             continue;
           }
         }
-        // start with a given node id
-        elseif ((int) $this->config->startWithNodeId && isset($rootNode))
-        {
-          if ($node->lft <= $rootNode->lft || $node->rgt >= $rootNode->rgt)
-          {
-            unset($nodes[$k]);
-            continue;
-          }
-        }
-        // start with children of a given node id
-        elseif ((int) $this->config->startWithChildrenOfNodeId && isset($rootNode))
-        {
-          if ($node->lft < $rootNode->lft || $node->rgt > $rootNode->rgt)
-          {
-            unset($nodes[$k]);
-            continue;
-          }
-        }
         // start with siblings of the active node
         elseif ($this->config->startWithSiblingsOfActive)
         {
@@ -706,6 +688,24 @@ class NaveeService extends BaseApplicationComponent {
             continue;
           }
 
+        }
+      }
+      // start with a given node id
+      elseif ((int) $this->config->startWithNodeId && isset($rootNode))
+      {
+        if ($node->lft <= $rootNode->lft || $node->rgt >= $rootNode->rgt)
+        {
+          unset($nodes[$k]);
+          continue;
+        }
+      }
+      // start with children of a given node id
+      elseif ((int) $this->config->startWithChildrenOfNodeId && isset($rootNode))
+      {
+        if ($node->lft < $rootNode->lft || $node->rgt > $rootNode->rgt)
+        {
+          unset($nodes[$k]);
+          continue;
         }
       }
     }
